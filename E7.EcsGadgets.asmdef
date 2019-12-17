@@ -1,0 +1,17 @@
+{
+    "name": "E7.EcsGadgets",
+    "references": [
+        "Unity.Entities",
+        "Unity.Collections",
+        "Unity.Entities.Hybrid"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
