@@ -7,7 +7,7 @@ namespace codegen
 {
     class Program
     {
-        static int[] tag = new int[] { 0, 1, 2, 3, 4 };
+        static int[] tag = new int[] { 0, 1, 2, 3, 4, 5, 6 };
         static int[] scd = new int[] { 0, 1, 2 };
         static StringWriter sw = new StringWriter();
 
@@ -17,19 +17,19 @@ namespace codegen
             {
                 for (int j = 0; j < scd.Length; j++)
                 {
-                    GetSingleton(tag[i], scd[j]);
+                    Gen1(tag[i], scd[j]);
                 }
             }
             File.WriteAllText("./EntityManagerUtilitySingleton.gen", sw.ToString());
         }
 
-        const string gsTemplate = @"
+        const string gsGetSingleton = @"
 /// <summary>
 /// Like `GetSingleton` in system but usable from outside.
 /// You can add more tag components and SCD constraints via
 /// overloads provided. The first type is always the returning value.
 /// </summary>
-public MAIN GetSingleton<<<TYPEHOR>>>(<<ARGS>>)
+public <<MAIN>> GetSingleton<<<TYPEHOR>>>(<<ARGS>>)
 <<WHERE>>
 {
     using (var eq = em.CreateEntityQuery(
@@ -37,12 +37,32 @@ public MAIN GetSingleton<<<TYPEHOR>>>(<<ARGS>>)
     ))
     {
         <<FILTER>>
-        return eq.GetSingleton<MAIN>();
+        return eq.GetSingleton<<<MAIN>>>();
     }
 }
 ";
 
-        const string gsEntityTemplate = @"
+        const string gsGetSingletonScdFirst = @"
+/// <summary>
+/// Like `GetSingleton` in system but usable from outside.
+/// You can add more tag components and SCD constraints via
+/// overloads provided. The first type is always the returning value.
+/// </summary>
+public <<MAIN>> GetSingleton<<<TYPEHOR>>>(<<ARGS>>)
+<<WHERE>>
+{
+    using (var eq = em.CreateEntityQuery(
+        <<TYPEVERT>>
+    ))
+    {
+        <<FILTER>>
+        return em.GetSharedComponentData<<<MAIN>>>(eq.GetSingletonEntity());
+    }
+}
+";
+
+
+        const string gsGetSingletonEntity = @"
 /// <summary>
 /// Like `GetSingletonEntity` in system but usable from outside.
 /// You can add more tag components and SCD constraints via
@@ -89,7 +109,7 @@ public int EntityCount<<<TYPEHOR>>>(<<ARGS>>)
 /// You have to dispose the returned native array.
 /// The returned native array will be allocated with Persistent allocator.
 /// </summary>
-public NativeArray<MAIN> ComponentDataArray<<<TYPEHOR>>>(<<ARGS>>)
+public NativeArray<<<MAIN>>> ComponentDataArray<<<TYPEHOR>>>(<<ARGS>>)
 <<WHERE>>
 {
     using (var eq = em.CreateEntityQuery(
@@ -97,7 +117,7 @@ public NativeArray<MAIN> ComponentDataArray<<<TYPEHOR>>>(<<ARGS>>)
     ))
     {
         <<FILTER>>
-         return eq.ToComponentDataArray<MAIN>(Allocator.Persistent);
+         return eq.ToComponentDataArray<<<MAIN>>>(Allocator.Persistent);
     }
 }
 ";
@@ -112,7 +132,7 @@ public NativeArray<MAIN> ComponentDataArray<<<TYPEHOR>>>(<<ARGS>>)
 /// it is not efficient for real use as it produces garbage.
 /// Good for unit testing.
 /// </summary>
-public MAIN[] Get<<<TYPEHOR>>>(<<ARGS>>)
+public <<MAIN>>[] Get<<<TYPEHOR>>>(<<ARGS>>)
 <<WHERE>>
 {
     using (var eq = em.CreateEntityQuery(
@@ -120,7 +140,7 @@ public MAIN[] Get<<<TYPEHOR>>>(<<ARGS>>)
     ))
     {
         <<FILTER>>
-        var na = eq.ToComponentDataArray<MAIN>(Allocator.Persistent);
+        var na = eq.ToComponentDataArray<<<MAIN>>>(Allocator.Persistent);
         var array = na.ToArray();
         na.Dispose();
         return array;
@@ -172,15 +192,15 @@ public Entity[] Entities<<<TYPEHOR>>>(<<ARGS>>)
 }
 ";
 
-        static void GetSingleton(int tag, int scd)
+        static void Gen1(int tag, int scd)
         {
+            if(tag == 0 && scd == 0) return;
             List<string> tags = new List<string>();
-            tags.Add("MAIN");
             List<string> scds = new List<string>();
             List<string> args = new List<string>();
             for (int i = 0; i < tag; i++)
             {
-                tags.Add($"TAG{i + 1}");
+                tags.Add($"CD{i + 1}");
             }
             for (int i = 0; i < scd; i++)
             {
@@ -204,17 +224,31 @@ public Entity[] Entities<<<TYPEHOR>>>(<<ARGS>>)
             string typeVert = string.Join(",\n", tags.Select(x => $"ComponentType.ReadOnly<{x}>()"));
             string filters = scd > 0 ? $"eq.SetSharedComponentFilter({string.Join(",", scds)});" : string.Empty;
 
-            Do(gsTemplate);
-            Do(gsEntityTemplate);
+            if (tag != 0)
+            {
+                Do(gsGetSingleton);
+            }
+            else
+            {
+                Do(gsGetSingletonScdFirst);
+            }
+
+            Do(gsGetSingletonEntity);
             Do(gsEntityCount);
-            Do(gsCda);
-            Do(gsGet);
+
+            if (tag != 0)
+            {
+                Do(gsCda);
+                Do(gsGet);
+            }
+
             Do(gsEa);
             Do(gsEntities);
 
             void Do(string tem)
             {
                 sw.WriteLine(tem
+                    .Replace("<<MAIN>>",tags[0])
                     .Replace("<<TYPEHOR>>", typeHor)
                     .Replace("<<ARGS>>", argsString)
                     .Replace("<<WHERE>>", wheres)

@@ -4,8 +4,11 @@ using Unity.Entities;
 namespace E7.EcsGadgets
 {
     /// <summary>
-    /// Performs higher level, one-off operation on <see cref="EntityManager"/> that it allocates
-    /// and immediately dispose <see cref="EntityQuery"/> inside each call. Useful for unit testing.
+    /// Performs higher level, one-off operation on <see cref="EntityManager"/>.
+    /// 
+    /// Many methods allocates
+    /// and immediately dispose <see cref="EntityQuery"/> inside each call.
+    /// They are useful for unit testing so you can query and check in one line.
     /// </summary>
     public partial class EntityManagerUtility
     {
