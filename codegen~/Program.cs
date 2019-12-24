@@ -173,8 +173,9 @@ public NativeArray<Entity> EntityArray<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
 /// Return a linearized entity array of all components combined into All query.
 /// You can add upto 2 SCD filters to the query.
 /// 
-/// You have to dispose the returned native array.
-/// The returned native array will be allocated with Persistent allocator.
+/// Returns managed array, you don't have to dispose it but
+/// it is not efficient for real use as it produces garbage.
+/// Good for unit testing.
 /// </summary>
 public Entity[] Entities<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
 <<WHERE>>

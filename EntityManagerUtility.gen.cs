@@ -83,8 +83,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<SCD1>(SCD1 filter1)
             where SCD1 : struct, ISharedComponentData
@@ -176,8 +177,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<SCD1>(bool nf)
             where SCD1 : struct, ISharedComponentData
@@ -280,8 +282,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
             where SCD1 : struct, ISharedComponentData
@@ -383,8 +386,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<SCD1, SCD2>(bool nf1, SCD2 filter2)
             where SCD1 : struct, ISharedComponentData
@@ -485,8 +489,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<SCD1, SCD2>(bool nf1, bool nf2)
             where SCD1 : struct, ISharedComponentData
@@ -623,8 +628,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1>()
             where CD1 : struct, IComponentData
@@ -777,8 +783,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, SCD1>(SCD1 filter1)
             where CD1 : struct, IComponentData
@@ -928,8 +935,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, SCD1>(bool nf)
             where CD1 : struct, IComponentData
@@ -1096,8 +1104,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
             where CD1 : struct, IComponentData
@@ -1261,8 +1270,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, SCD1, SCD2>(bool nf1, SCD2 filter2)
             where CD1 : struct, IComponentData
@@ -1425,8 +1435,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, SCD1, SCD2>(bool nf1, bool nf2)
             where CD1 : struct, IComponentData
@@ -1577,8 +1588,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2>()
             where CD1 : struct, IComponentData
@@ -1745,8 +1757,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2, SCD1>(SCD1 filter1)
             where CD1 : struct, IComponentData
@@ -1910,8 +1923,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2, SCD1>(bool nf)
             where CD1 : struct, IComponentData
@@ -2092,8 +2106,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
             where CD1 : struct, IComponentData
@@ -2271,8 +2286,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2, SCD1, SCD2>(bool nf1, SCD2 filter2)
             where CD1 : struct, IComponentData
@@ -2449,8 +2465,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2, SCD1, SCD2>(bool nf1, bool nf2)
             where CD1 : struct, IComponentData
@@ -2615,8 +2632,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2, CD3>()
             where CD1 : struct, IComponentData
@@ -2797,8 +2815,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2, CD3, SCD1>(SCD1 filter1)
             where CD1 : struct, IComponentData
@@ -2976,8 +2995,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2, CD3, SCD1>(bool nf)
             where CD1 : struct, IComponentData
@@ -3172,8 +3192,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2, CD3, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
             where CD1 : struct, IComponentData
@@ -3365,8 +3386,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2, CD3, SCD1, SCD2>(bool nf1, SCD2 filter2)
             where CD1 : struct, IComponentData
@@ -3557,8 +3579,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2, CD3, SCD1, SCD2>(bool nf1, bool nf2)
             where CD1 : struct, IComponentData
@@ -3737,8 +3760,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2, CD3, CD4>()
             where CD1 : struct, IComponentData
@@ -3933,8 +3957,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2, CD3, CD4, SCD1>(SCD1 filter1)
             where CD1 : struct, IComponentData
@@ -4126,8 +4151,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2, CD3, CD4, SCD1>(bool nf)
             where CD1 : struct, IComponentData
@@ -4336,8 +4362,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2, CD3, CD4, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
             where CD1 : struct, IComponentData
@@ -4543,8 +4570,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2, CD3, CD4, SCD1, SCD2>(bool nf1, SCD2 filter2)
             where CD1 : struct, IComponentData
@@ -4749,8 +4777,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2, CD3, CD4, SCD1, SCD2>(bool nf1, bool nf2)
             where CD1 : struct, IComponentData
@@ -4943,8 +4972,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2, CD3, CD4, CD5>()
             where CD1 : struct, IComponentData
@@ -5153,8 +5183,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2, CD3, CD4, CD5, SCD1>(SCD1 filter1)
             where CD1 : struct, IComponentData
@@ -5360,8 +5391,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2, CD3, CD4, CD5, SCD1>(bool nf)
             where CD1 : struct, IComponentData
@@ -5584,8 +5616,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
             where CD1 : struct, IComponentData
@@ -5805,8 +5838,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(bool nf1, SCD2 filter2)
             where CD1 : struct, IComponentData
@@ -6025,8 +6059,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(bool nf1, bool nf2)
             where CD1 : struct, IComponentData
@@ -6233,8 +6268,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2, CD3, CD4, CD5, CD6>()
             where CD1 : struct, IComponentData
@@ -6457,8 +6493,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(SCD1 filter1)
             where CD1 : struct, IComponentData
@@ -6678,8 +6715,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(bool nf)
             where CD1 : struct, IComponentData
@@ -6916,8 +6954,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
             where CD1 : struct, IComponentData
@@ -7151,8 +7190,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(bool nf1, SCD2 filter2)
             where CD1 : struct, IComponentData
@@ -7385,8 +7425,9 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
+        /// Returns managed array, you don't have to dispose it but
+        /// it is not efficient for real use as it produces garbage.
+        /// Good for unit testing.
         /// </summary>
         public Entity[] Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(bool nf1, bool nf2)
             where CD1 : struct, IComponentData
