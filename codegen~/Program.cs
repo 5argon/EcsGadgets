@@ -234,7 +234,7 @@ public Entity[] Entities<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
                     }
                 }));
                 string typeVert = string.Join(",\n", tags.Select(x => $"ComponentType.ReadOnly<{x}>()"));
-                string filters = scd > 0 && ft == 0 ?
+                string filters = scd > 0 && ft != scd ?
                 $"eq.SetSharedComponentFilter({string.Join(",", scds)});"
                 : string.Empty;
 

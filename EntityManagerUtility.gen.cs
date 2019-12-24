@@ -318,6 +318,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return em.GetSharedComponentData<SCD1>(eq.GetSingletonEntity());
             }
         }
@@ -337,6 +338,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.GetSingletonEntity();
             }
         }
@@ -356,6 +358,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.CalculateEntityCount();
             }
         }
@@ -377,6 +380,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.ToEntityArray(Allocator.Persistent);
             }
         }
@@ -399,6 +403,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 var na = eq.ToEntityArray(Allocator.Persistent);
                 var array = na.ToArray();
                 na.Dispose();
@@ -1144,6 +1149,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.GetSingleton<CD1>();
             }
         }
@@ -1165,6 +1171,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.GetSingletonEntity();
             }
         }
@@ -1186,6 +1193,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.CalculateEntityCount();
             }
         }
@@ -1210,6 +1218,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
             }
         }
@@ -1235,6 +1244,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
                 var array = na.ToArray();
                 na.Dispose();
@@ -1261,6 +1271,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.ToEntityArray(Allocator.Persistent);
             }
         }
@@ -1285,6 +1296,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 var na = eq.ToEntityArray(Allocator.Persistent);
                 var array = na.ToArray();
                 na.Dispose();
@@ -2150,6 +2162,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.GetSingleton<CD1>();
             }
         }
@@ -2173,6 +2186,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.GetSingletonEntity();
             }
         }
@@ -2196,6 +2210,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.CalculateEntityCount();
             }
         }
@@ -2222,6 +2237,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
             }
         }
@@ -2249,6 +2265,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
                 var array = na.ToArray();
                 na.Dispose();
@@ -2277,6 +2294,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.ToEntityArray(Allocator.Persistent);
             }
         }
@@ -2303,6 +2321,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 var na = eq.ToEntityArray(Allocator.Persistent);
                 var array = na.ToArray();
                 na.Dispose();
@@ -3240,6 +3259,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.GetSingleton<CD1>();
             }
         }
@@ -3265,6 +3285,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.GetSingletonEntity();
             }
         }
@@ -3290,6 +3311,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.CalculateEntityCount();
             }
         }
@@ -3318,6 +3340,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
             }
         }
@@ -3347,6 +3370,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
                 var array = na.ToArray();
                 na.Dispose();
@@ -3377,6 +3401,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.ToEntityArray(Allocator.Persistent);
             }
         }
@@ -3405,6 +3430,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 var na = eq.ToEntityArray(Allocator.Persistent);
                 var array = na.ToArray();
                 na.Dispose();
@@ -4414,6 +4440,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.GetSingleton<CD1>();
             }
         }
@@ -4441,6 +4468,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.GetSingletonEntity();
             }
         }
@@ -4468,6 +4496,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.CalculateEntityCount();
             }
         }
@@ -4498,6 +4527,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
             }
         }
@@ -4529,6 +4559,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
                 var array = na.ToArray();
                 na.Dispose();
@@ -4561,6 +4592,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.ToEntityArray(Allocator.Persistent);
             }
         }
@@ -4591,6 +4623,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 var na = eq.ToEntityArray(Allocator.Persistent);
                 var array = na.ToArray();
                 na.Dispose();
@@ -5672,6 +5705,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.GetSingleton<CD1>();
             }
         }
@@ -5701,6 +5735,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.GetSingletonEntity();
             }
         }
@@ -5730,6 +5765,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.CalculateEntityCount();
             }
         }
@@ -5762,6 +5798,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
             }
         }
@@ -5795,6 +5832,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
                 var array = na.ToArray();
                 na.Dispose();
@@ -5829,6 +5867,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.ToEntityArray(Allocator.Persistent);
             }
         }
@@ -5861,6 +5900,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 var na = eq.ToEntityArray(Allocator.Persistent);
                 var array = na.ToArray();
                 na.Dispose();
@@ -7014,6 +7054,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.GetSingleton<CD1>();
             }
         }
@@ -7045,6 +7086,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.GetSingletonEntity();
             }
         }
@@ -7076,6 +7118,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.CalculateEntityCount();
             }
         }
@@ -7110,6 +7153,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
             }
         }
@@ -7145,6 +7189,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
                 var array = na.ToArray();
                 na.Dispose();
@@ -7181,6 +7226,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 return eq.ToEntityArray(Allocator.Persistent);
             }
         }
@@ -7215,6 +7261,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
+                eq.SetSharedComponentFilter(filter2);
                 var na = eq.ToEntityArray(Allocator.Persistent);
                 var array = na.ToArray();
                 na.Dispose();

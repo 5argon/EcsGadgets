@@ -317,7 +317,7 @@ where SCD2 : struct, ISharedComponentData
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         return em.GetSharedComponentData<SCD1>(eq.GetSingletonEntity());
     }
 }
@@ -337,7 +337,7 @@ where SCD2 : struct, ISharedComponentData
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         return eq.GetSingletonEntity();
     }
 }
@@ -357,7 +357,7 @@ where SCD2 : struct, ISharedComponentData
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         return eq.CalculateEntityCount();
     }
 }
@@ -379,7 +379,7 @@ where SCD2 : struct, ISharedComponentData
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
          return eq.ToEntityArray(Allocator.Persistent);
     }
 }
@@ -402,7 +402,7 @@ where SCD2 : struct, ISharedComponentData
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         var na = eq.ToEntityArray(Allocator.Persistent);
         var array = na.ToArray();
         na.Dispose();
@@ -1167,7 +1167,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         return eq.GetSingleton<CD1>();
     }
 }
@@ -1189,7 +1189,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         return eq.GetSingletonEntity();
     }
 }
@@ -1211,7 +1211,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         return eq.CalculateEntityCount();
     }
 }
@@ -1236,7 +1236,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
          return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
     }
 }
@@ -1262,7 +1262,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
         var array = na.ToArray();
         na.Dispose();
@@ -1289,7 +1289,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
          return eq.ToEntityArray(Allocator.Persistent);
     }
 }
@@ -1314,7 +1314,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         var na = eq.ToEntityArray(Allocator.Persistent);
         var array = na.ToArray();
         na.Dispose();
@@ -2201,7 +2201,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         return eq.GetSingleton<CD1>();
     }
 }
@@ -2225,7 +2225,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         return eq.GetSingletonEntity();
     }
 }
@@ -2249,7 +2249,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         return eq.CalculateEntityCount();
     }
 }
@@ -2276,7 +2276,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
          return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
     }
 }
@@ -2304,7 +2304,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
         var array = na.ToArray();
         na.Dispose();
@@ -2333,7 +2333,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
          return eq.ToEntityArray(Allocator.Persistent);
     }
 }
@@ -2360,7 +2360,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         var na = eq.ToEntityArray(Allocator.Persistent);
         var array = na.ToArray();
         na.Dispose();
@@ -3319,7 +3319,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         return eq.GetSingleton<CD1>();
     }
 }
@@ -3345,7 +3345,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         return eq.GetSingletonEntity();
     }
 }
@@ -3371,7 +3371,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         return eq.CalculateEntityCount();
     }
 }
@@ -3400,7 +3400,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
          return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
     }
 }
@@ -3430,7 +3430,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
         var array = na.ToArray();
         na.Dispose();
@@ -3461,7 +3461,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
          return eq.ToEntityArray(Allocator.Persistent);
     }
 }
@@ -3490,7 +3490,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         var na = eq.ToEntityArray(Allocator.Persistent);
         var array = na.ToArray();
         na.Dispose();
@@ -4521,7 +4521,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         return eq.GetSingleton<CD1>();
     }
 }
@@ -4549,7 +4549,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         return eq.GetSingletonEntity();
     }
 }
@@ -4577,7 +4577,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         return eq.CalculateEntityCount();
     }
 }
@@ -4608,7 +4608,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
          return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
     }
 }
@@ -4640,7 +4640,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
         var array = na.ToArray();
         na.Dispose();
@@ -4673,7 +4673,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
          return eq.ToEntityArray(Allocator.Persistent);
     }
 }
@@ -4704,7 +4704,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         var na = eq.ToEntityArray(Allocator.Persistent);
         var array = na.ToArray();
         na.Dispose();
@@ -5807,7 +5807,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         return eq.GetSingleton<CD1>();
     }
 }
@@ -5837,7 +5837,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         return eq.GetSingletonEntity();
     }
 }
@@ -5867,7 +5867,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         return eq.CalculateEntityCount();
     }
 }
@@ -5900,7 +5900,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
          return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
     }
 }
@@ -5934,7 +5934,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
         var array = na.ToArray();
         na.Dispose();
@@ -5969,7 +5969,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
          return eq.ToEntityArray(Allocator.Persistent);
     }
 }
@@ -6002,7 +6002,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         var na = eq.ToEntityArray(Allocator.Persistent);
         var array = na.ToArray();
         na.Dispose();
@@ -7177,7 +7177,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         return eq.GetSingleton<CD1>();
     }
 }
@@ -7209,7 +7209,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         return eq.GetSingletonEntity();
     }
 }
@@ -7241,7 +7241,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         return eq.CalculateEntityCount();
     }
 }
@@ -7276,7 +7276,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
          return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
     }
 }
@@ -7312,7 +7312,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
         var array = na.ToArray();
         na.Dispose();
@@ -7349,7 +7349,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
          return eq.ToEntityArray(Allocator.Persistent);
     }
 }
@@ -7384,7 +7384,7 @@ ComponentType.ReadOnly<SCD1>(),
 ComponentType.ReadOnly<SCD2>()
     ))
     {
-        
+        eq.SetSharedComponentFilter(filter2);
         var na = eq.ToEntityArray(Allocator.Persistent);
         var array = na.ToArray();
         na.Dispose();
