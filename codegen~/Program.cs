@@ -29,7 +29,7 @@ namespace codegen
 /// You can add more tag components and SCD constraints via
 /// overloads provided. The first type is always the returning value.
 /// </summary>
-public <<MAIN>> GetSingleton<<<TYPEHOR>>>(<<ARGS>>)
+public <<MAIN>> GetSingleton<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
 <<WHERE>>
 {
     using (var eq = em.CreateEntityQuery(
@@ -48,7 +48,7 @@ public <<MAIN>> GetSingleton<<<TYPEHOR>>>(<<ARGS>>)
 /// You can add more tag components and SCD constraints via
 /// overloads provided. The first type is always the returning value.
 /// </summary>
-public <<MAIN>> GetSingleton<<<TYPEHOR>>>(<<ARGS>>)
+public <<MAIN>> GetSingleton<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
 <<WHERE>>
 {
     using (var eq = em.CreateEntityQuery(
@@ -68,7 +68,7 @@ public <<MAIN>> GetSingleton<<<TYPEHOR>>>(<<ARGS>>)
 /// You can add more tag components and SCD constraints via
 /// overloads provided.
 /// </summary>
-public Entity GetSingletonEntity<<<TYPEHOR>>>(<<ARGS>>)
+public Entity GetSingletonEntity<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
 <<WHERE>>
 {
     using (var eq = em.CreateEntityQuery(
@@ -87,7 +87,7 @@ public Entity GetSingletonEntity<<<TYPEHOR>>>(<<ARGS>>)
 /// all components in the overload you choose plus upto
 /// 2 SCD filters.
 /// </summary>
-public int EntityCount<<<TYPEHOR>>>(<<ARGS>>)
+public int EntityCount<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
 <<WHERE>>
 {
     using (var eq = em.CreateEntityQuery(
@@ -109,7 +109,7 @@ public int EntityCount<<<TYPEHOR>>>(<<ARGS>>)
 /// You have to dispose the returned native array.
 /// The returned native array will be allocated with Persistent allocator.
 /// </summary>
-public NativeArray<<<MAIN>>> ComponentDataArray<<<TYPEHOR>>>(<<ARGS>>)
+public NativeArray<<<MAIN>>> ComponentDataArray<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
 <<WHERE>>
 {
     using (var eq = em.CreateEntityQuery(
@@ -132,7 +132,7 @@ public NativeArray<<<MAIN>>> ComponentDataArray<<<TYPEHOR>>>(<<ARGS>>)
 /// it is not efficient for real use as it produces garbage.
 /// Good for unit testing.
 /// </summary>
-public <<MAIN>>[] Get<<<TYPEHOR>>>(<<ARGS>>)
+public <<MAIN>>[] Get<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
 <<WHERE>>
 {
     using (var eq = em.CreateEntityQuery(
@@ -155,7 +155,7 @@ public <<MAIN>>[] Get<<<TYPEHOR>>>(<<ARGS>>)
 /// You have to dispose the returned native array.
 /// The returned native array will be allocated with Persistent allocator.
 /// </summary>
-public NativeArray<Entity> EntityArray<<<TYPEHOR>>>(<<ARGS>>)
+public NativeArray<Entity> EntityArray<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
 <<WHERE>>
 {
     using (var eq = em.CreateEntityQuery(
@@ -176,7 +176,7 @@ public NativeArray<Entity> EntityArray<<<TYPEHOR>>>(<<ARGS>>)
 /// You have to dispose the returned native array.
 /// The returned native array will be allocated with Persistent allocator.
 /// </summary>
-public Entity[] Entities<<<TYPEHOR>>>(<<ARGS>>)
+public Entity[] Entities<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
 <<WHERE>>
 {
     using (var eq = em.CreateEntityQuery(
@@ -194,67 +194,82 @@ public Entity[] Entities<<<TYPEHOR>>>(<<ARGS>>)
 
         static void Gen1(int tag, int scd)
         {
-            if(tag == 0 && scd == 0) return;
-            List<string> tags = new List<string>();
-            List<string> scds = new List<string>();
-            List<string> args = new List<string>();
-            for (int i = 0; i < tag; i++)
+            if (tag == 0 && scd == 0) return;
+            //Every time there is an scd, gen a no filter, and filtered (1,2) version.
+            for (int ft = 0; ft < scd + 1; ft++)
             {
-                tags.Add($"CD{i + 1}");
-            }
-            for (int i = 0; i < scd; i++)
-            {
-                tags.Add($"SCD{i + 1}");
-                scds.Add($"filter{i + 1}");
-                args.Add($"SCD{i + 1} filter{i + 1}");
-            }
-            string typeHor = string.Join(",", tags);
-            string argsString = string.Join(",", args);
-            string wheres = string.Join("\n", tags.Select(x =>
-            {
-                if (x.Contains("SCD"))
+                List<string> tags = new List<string>();
+                List<string> scds = new List<string>();
+                List<string> args = new List<string>();
+                List<string> argsFilter = new List<string>();
+                for (int i = 0; i < tag; i++)
                 {
-                    return $"where {x} : struct, ISharedComponentData";
+                    tags.Add($"CD{i + 1}");
+                }
+                for (int i = 0; i < scd; i++)
+                {
+                    tags.Add($"SCD{i + 1}");
+                    if (i >= ft)
+                    {
+                        scds.Add($"filter{i + 1}");
+                        args.Add($"SCD{i + 1} filter{i + 1}");
+                    }
+                    else
+                    {
+                        args.Add($"bool nf{(scd > 1 ? (i + 1).ToString() : string.Empty)}");
+                    }
+                }
+                string typeHor = string.Join(",", tags);
+                string argsString = scd > 0 ? string.Join(",", args) : string.Empty;
+                string wheres = string.Join("\n", tags.Select(x =>
+                {
+                    if (x.Contains("SCD"))
+                    {
+                        return $"where {x} : struct, ISharedComponentData";
+                    }
+                    else
+                    {
+                        return $"where {x} : struct, IComponentData";
+                    }
+                }));
+                string typeVert = string.Join(",\n", tags.Select(x => $"ComponentType.ReadOnly<{x}>()"));
+                string filters = scd > 0 && ft == 0 ?
+                $"eq.SetSharedComponentFilter({string.Join(",", scds)});"
+                : string.Empty;
+
+                if (tag != 0)
+                {
+                    Do(gsGetSingleton);
                 }
                 else
                 {
-                    return $"where {x} : struct, IComponentData";
+                    Do(gsGetSingletonScdFirst);
                 }
-            }));
-            string typeVert = string.Join(",\n", tags.Select(x => $"ComponentType.ReadOnly<{x}>()"));
-            string filters = scd > 0 ? $"eq.SetSharedComponentFilter({string.Join(",", scds)});" : string.Empty;
 
-            if (tag != 0)
-            {
-                Do(gsGetSingleton);
-            }
-            else
-            {
-                Do(gsGetSingletonScdFirst);
-            }
+                Do(gsGetSingletonEntity);
+                Do(gsEntityCount);
 
-            Do(gsGetSingletonEntity);
-            Do(gsEntityCount);
+                if (tag != 0)
+                {
+                    Do(gsCda);
+                    Do(gsGet);
+                }
 
-            if (tag != 0)
-            {
-                Do(gsCda);
-                Do(gsGet);
-            }
+                Do(gsEa);
+                Do(gsEntities);
 
-            Do(gsEa);
-            Do(gsEntities);
-
-            void Do(string tem)
-            {
-                sw.WriteLine(tem
-                    .Replace("<<MAIN>>",tags[0])
-                    .Replace("<<TYPEHOR>>", typeHor)
-                    .Replace("<<ARGS>>", argsString)
-                    .Replace("<<WHERE>>", wheres)
-                    .Replace("<<TYPEVERT>>", typeVert)
-                    .Replace("<<FILTER>>", filters)
-                );
+                void Do(string tem)
+                {
+                    sw.WriteLine(tem
+                        .Replace("<<MAIN>>", tags[0])
+                        .Replace("<<NOFILTER>>", string.Empty)
+                        .Replace("<<TYPEHOR>>", typeHor)
+                        .Replace("<<ARGS>>", argsString)
+                        .Replace("<<WHERE>>", wheres)
+                        .Replace("<<TYPEVERT>>", typeVert)
+                        .Replace("<<FILTER>>", filters)
+                    );
+                }
             }
         }
     }

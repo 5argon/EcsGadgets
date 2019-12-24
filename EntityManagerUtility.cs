@@ -8,7 +8,13 @@ namespace E7.EcsGadgets
     /// 
     /// Many methods allocates
     /// and immediately dispose <see cref="EntityQuery"/> inside each call.
-    /// They are useful for unit testing so you can query and check in one line.
+    ///
+    /// In normal code, you should properly use `GetEntityQuery` in systems
+    /// so reads are in the dependency chain. However this system independent
+    /// shortcuts are useful for unit testing so you can query and check in one line.
+    ///
+    /// There is no `CompleteAllJobs` inside. There is a chance that it would cause
+    /// error when someone else is reading/writing the same data.
     /// </summary>
     public partial class EntityManagerUtility
     {
