@@ -64,28 +64,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<SCD1>(SCD1 filter1)
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -154,27 +132,6 @@ namespace E7.EcsGadgets
             ))
             {
                 return eq.CalculateEntityCount();
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<SCD1>(bool nf)
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -259,30 +216,6 @@ namespace E7.EcsGadgets
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
                 return eq.CalculateEntityCount();
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -378,30 +311,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<SCD1, SCD2>(bool nf1, SCD2 filter2)
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -478,29 +387,6 @@ namespace E7.EcsGadgets
             ))
             {
                 return eq.CalculateEntityCount();
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<SCD1, SCD2>(bool nf1, bool nf2)
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -587,26 +473,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1>()
-            where CD1 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>()
-            ))
-            {
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -622,27 +488,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1>()
-            where CD1 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -667,48 +512,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1>(Func<CD1, bool> where)
-            where CD1 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -823,29 +626,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, SCD1>(SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -864,30 +644,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, SCD1>(SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -981,28 +737,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, SCD1>(bool nf)
-            where CD1 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -1020,29 +754,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, SCD1>(bool nf)
-            where CD1 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -1069,51 +780,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, SCD1>(Func<CD1, bool> where, SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -1162,50 +828,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, SCD1>(Func<CD1, bool> where, bool nf)
-            where CD1 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -1328,31 +950,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -1373,32 +970,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -1503,31 +1074,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, SCD1, SCD2>(bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -1548,32 +1094,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, SCD1, SCD2>(bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -1675,30 +1195,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, SCD1, SCD2>(bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -1718,31 +1214,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, SCD1, SCD2>(bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -1771,53 +1242,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, SCD1, SCD2>(Func<CD1, bool> where, SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -1876,53 +1300,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, SCD1, SCD2>(Func<CD1, bool> where, bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -1965,52 +1342,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, SCD1, SCD2>(Func<CD1, bool> where, bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -2126,28 +1457,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2>()
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>()
-            ))
-            {
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -2165,29 +1474,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2>()
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -2214,50 +1500,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2>(Func<CD1, bool> where)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -2305,51 +1547,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2>(Func<CD1, CD2, bool> where)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -2473,31 +1670,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2, SCD1>(SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -2518,32 +1690,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, SCD1>(SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -2645,30 +1791,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2, SCD1>(bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -2688,31 +1810,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, SCD1>(bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -2741,53 +1838,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, SCD1>(Func<CD1, bool> where, SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -2846,52 +1896,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, SCD1>(Func<CD1, bool> where, bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -2933,54 +1937,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, SCD1>(Func<CD1, CD2, bool> where, SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -3032,53 +1988,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, SCD1>(Func<CD1, CD2, bool> where, bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -3210,33 +2119,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -3259,34 +2141,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -3399,33 +2253,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2, SCD1, SCD2>(bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -3448,34 +2275,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, SCD1, SCD2>(bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -3585,32 +2384,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2, SCD1, SCD2>(bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -3632,33 +2405,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, SCD1, SCD2>(bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -3689,55 +2435,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, SCD1, SCD2>(Func<CD1, bool> where, SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -3798,55 +2495,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, SCD1, SCD2>(Func<CD1, bool> where, bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -3899,54 +2547,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, SCD1, SCD2>(Func<CD1, bool> where, bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -3990,57 +2590,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, SCD1, SCD2>(Func<CD1, CD2, bool> where, SCD1 filter1,
-            SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -4102,56 +2651,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, SCD1, SCD2>(Func<CD1, CD2, bool> where, bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -4197,55 +2696,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, SCD1, SCD2>(Func<CD1, CD2, bool> where, bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -4370,30 +2820,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2, CD3>()
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>()
-            ))
-            {
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -4413,31 +2839,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3>()
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -4466,52 +2867,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3>(Func<CD1, bool> where)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -4569,53 +2924,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3>(Func<CD1, CD2, bool> where)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -4658,54 +2966,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3>(Func<CD1, CD2, CD3, bool> where)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -4838,33 +3098,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2, CD3, SCD1>(SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -4887,34 +3120,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, SCD1>(SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -5024,32 +3229,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2, CD3, SCD1>(bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -5071,33 +3250,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, SCD1>(bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -5128,55 +3280,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, SCD1>(Func<CD1, bool> where, SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -5237,54 +3340,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, SCD1>(Func<CD1, bool> where, bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -5328,56 +3383,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, SCD1>(Func<CD1, CD2, bool> where, SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -5439,55 +3444,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, SCD1>(Func<CD1, CD2, bool> where, bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -5532,57 +3488,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, SCD1>(Func<CD1, CD2, CD3, bool> where, SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -5637,56 +3542,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, SCD1>(Func<CD1, CD2, CD3, bool> where, bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -5827,35 +3682,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2, CD3, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -5880,36 +3706,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -6030,35 +3826,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2, CD3, SCD1, SCD2>(bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -6083,36 +3850,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, SCD1, SCD2>(bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -6230,34 +3967,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2, CD3, SCD1, SCD2>(bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -6281,35 +3990,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, SCD1, SCD2>(bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -6342,58 +4022,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, SCD1, SCD2>(Func<CD1, bool> where, SCD1 filter1,
-            SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -6456,57 +4084,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, SCD1, SCD2>(Func<CD1, bool> where, bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -6561,56 +4138,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, SCD1, SCD2>(Func<CD1, bool> where, bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -6656,59 +4183,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, SCD1, SCD2>(Func<CD1, CD2, bool> where, SCD1 filter1,
-            SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -6772,59 +4246,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, SCD1, SCD2>(Func<CD1, CD2, bool> where, bool nf1,
-            SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -6880,58 +4301,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, SCD1, SCD2>(Func<CD1, CD2, bool> where, bool nf1,
-            bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -6978,60 +4347,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, SCD1, SCD2>(Func<CD1, CD2, CD3, bool> where, SCD1 filter1,
-            SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -7096,60 +4411,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, SCD1, SCD2>(Func<CD1, CD2, CD3, bool> where, bool nf1,
-            SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -7198,59 +4459,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, SCD1, SCD2>(Func<CD1, CD2, CD3, bool> where, bool nf1,
-            bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -7384,32 +4592,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2, CD3, CD4>()
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>()
-            ))
-            {
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -7431,33 +4613,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4>()
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -7488,54 +4643,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4>(Func<CD1, bool> where)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -7587,55 +4694,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4>(Func<CD1, CD2, bool> where)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -7696,56 +4754,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4>(Func<CD1, CD2, CD3, bool> where)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -7791,57 +4799,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4>(Func<CD1, CD2, CD3, CD4, bool> where)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -7983,35 +4940,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2, CD3, CD4, SCD1>(SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -8036,36 +4964,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, SCD1>(SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -8183,34 +5081,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2, CD3, CD4, SCD1>(bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -8234,35 +5104,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, SCD1>(bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -8295,57 +5136,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, SCD1>(Func<CD1, bool> where, SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -8408,56 +5198,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, SCD1>(Func<CD1, bool> where, bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -8503,58 +5243,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, SCD1>(Func<CD1, CD2, bool> where, SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -8618,57 +5306,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, SCD1>(Func<CD1, CD2, bool> where, bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -8715,59 +5352,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, SCD1>(Func<CD1, CD2, CD3, bool> where, SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -8832,58 +5416,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, SCD1>(Func<CD1, CD2, CD3, bool> where, bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -8931,61 +5463,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, SCD1>(Func<CD1, CD2, CD3, CD4, bool> where,
-            SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -9043,59 +5520,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, SCD1>(Func<CD1, CD2, CD3, CD4, bool> where, bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -9245,37 +5669,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2, CD3, CD4, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -9302,38 +5695,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -9462,37 +5823,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2, CD3, CD4, SCD1, SCD2>(bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -9519,38 +5849,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, SCD1, SCD2>(bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -9676,36 +5974,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2, CD3, CD4, SCD1, SCD2>(bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -9731,37 +5999,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, SCD1, SCD2>(bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -9796,60 +6033,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, SCD1, SCD2>(Func<CD1, bool> where, SCD1 filter1,
-            SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -9914,60 +6097,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, SCD1, SCD2>(Func<CD1, bool> where, bool nf1,
-            SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -10024,59 +6153,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, SCD1, SCD2>(Func<CD1, bool> where, bool nf1,
-            bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -10124,61 +6200,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, SCD1, SCD2>(Func<CD1, CD2, bool> where, SCD1 filter1,
-            SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -10244,61 +6265,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, SCD1, SCD2>(Func<CD1, CD2, bool> where, bool nf1,
-            SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -10356,60 +6322,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, SCD1, SCD2>(Func<CD1, CD2, bool> where, bool nf1,
-            bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -10458,62 +6370,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, SCD1, SCD2>(Func<CD1, CD2, CD3, bool> where,
-            SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -10581,62 +6437,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, SCD1, SCD2>(Func<CD1, CD2, CD3, bool> where,
-            bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -10696,61 +6496,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, SCD1, SCD2>(Func<CD1, CD2, CD3, bool> where,
-            bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -10800,63 +6545,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, SCD1, SCD2>(Func<CD1, CD2, CD3, CD4, bool> where,
-            SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -10925,63 +6613,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, SCD1, SCD2>(Func<CD1, CD2, CD3, CD4, bool> where,
-            bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -11034,62 +6665,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, SCD1, SCD2>(Func<CD1, CD2, CD3, CD4, bool> where,
-            bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -11233,34 +6808,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2, CD3, CD4, CD5>()
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>()
-            ))
-            {
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -11284,35 +6831,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5>()
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -11345,56 +6863,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5>(Func<CD1, bool> where)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -11456,57 +6924,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5>(Func<CD1, CD2, bool> where)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -11553,58 +6970,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5>(Func<CD1, CD2, CD3, bool> where)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -11668,59 +7033,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5>(Func<CD1, CD2, CD3, CD4, bool> where)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -11769,60 +7081,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5>(Func<CD1, CD2, CD3, CD4, CD5, bool> where)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                using (var cd5Cda = eq.ToComponentDataArray<CD5>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i], cd5Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -11973,37 +7231,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2, CD3, CD4, CD5, SCD1>(SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -12030,38 +7257,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1>(SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -12187,36 +7382,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2, CD3, CD4, CD5, SCD1>(bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -12242,37 +7407,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1>(bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -12307,59 +7441,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1>(Func<CD1, bool> where, SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -12424,58 +7505,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1>(Func<CD1, bool> where, bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -12523,60 +7552,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1>(Func<CD1, CD2, bool> where, SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -12642,59 +7617,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1>(Func<CD1, CD2, bool> where, bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -12743,62 +7665,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1>(Func<CD1, CD2, CD3, bool> where,
-            SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -12865,60 +7731,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1>(Func<CD1, CD2, CD3, bool> where, bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -12968,63 +7780,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1>(Func<CD1, CD2, CD3, CD4, bool> where,
-            SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -13092,62 +7847,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1>(Func<CD1, CD2, CD3, CD4, bool> where,
-            bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -13198,64 +7897,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1>(Func<CD1, CD2, CD3, CD4, CD5, bool> where,
-            SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                using (var cd5Cda = eq.ToComponentDataArray<CD5>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i], cd5Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -13316,63 +7957,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1>(Func<CD1, CD2, CD3, CD4, CD5, bool> where,
-            bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                using (var cd5Cda = eq.ToComponentDataArray<CD5>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i], cd5Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -13531,39 +8115,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -13592,40 +8143,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -13762,39 +8279,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -13823,40 +8307,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -13990,38 +8440,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -14049,39 +8467,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -14118,62 +8503,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(Func<CD1, bool> where, SCD1 filter1,
-            SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -14240,62 +8569,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(Func<CD1, bool> where, bool nf1,
-            SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -14354,61 +8627,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(Func<CD1, bool> where, bool nf1,
-            bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -14458,63 +8676,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(Func<CD1, CD2, bool> where,
-            SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -14583,63 +8744,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(Func<CD1, CD2, bool> where,
-            bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -14700,62 +8804,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(Func<CD1, CD2, bool> where,
-            bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -14806,64 +8854,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(Func<CD1, CD2, CD3, bool> where,
-            SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -14933,64 +8923,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(Func<CD1, CD2, CD3, bool> where,
-            bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -15052,63 +8984,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(Func<CD1, CD2, CD3, bool> where,
-            bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -15161,65 +9036,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(
-            Func<CD1, CD2, CD3, CD4, bool> where, SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -15290,65 +9106,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(
-            Func<CD1, CD2, CD3, CD4, bool> where, bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -15411,64 +9168,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(
-            Func<CD1, CD2, CD3, CD4, bool> where, bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -15522,66 +9221,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(
-            Func<CD1, CD2, CD3, CD4, CD5, bool> where, SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                using (var cd5Cda = eq.ToComponentDataArray<CD5>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i], cd5Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -15653,66 +9292,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(
-            Func<CD1, CD2, CD3, CD4, CD5, bool> where, bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                using (var cd5Cda = eq.ToComponentDataArray<CD5>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i], cd5Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -15768,65 +9347,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(
-            Func<CD1, CD2, CD3, CD4, CD5, bool> where, bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                using (var cd5Cda = eq.ToComponentDataArray<CD5>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i], cd5Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -15979,36 +9499,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2, CD3, CD4, CD5, CD6>()
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>()
-            ))
-            {
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -16034,37 +9524,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6>()
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -16099,58 +9558,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6>(Func<CD1, bool> where)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -16206,59 +9613,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6>(Func<CD1, CD2, bool> where)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -16323,60 +9677,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6>(Func<CD1, CD2, CD3, bool> where)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -16426,61 +9726,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6>(Func<CD1, CD2, CD3, CD4, bool> where)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -16547,62 +9792,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6>(Func<CD1, CD2, CD3, CD4, CD5, bool> where)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                using (var cd5Cda = eq.ToComponentDataArray<CD5>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i], cd5Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -16654,64 +9843,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6>(
-            Func<CD1, CD2, CD3, CD4, CD5, CD6, bool> where)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                using (var cd5Cda = eq.ToComponentDataArray<CD5>(Allocator.TempJob))
-                using (var cd6Cda = eq.ToComponentDataArray<CD6>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i], cd5Cda[i], cd6Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -16871,39 +10002,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -16932,40 +10030,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -17099,38 +10163,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -17158,39 +10190,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -17227,61 +10226,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(Func<CD1, bool> where, SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -17348,60 +10292,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(Func<CD1, bool> where, bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -17451,63 +10341,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(Func<CD1, CD2, bool> where,
-            SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -17575,61 +10408,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(Func<CD1, CD2, bool> where, bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -17680,64 +10458,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(Func<CD1, CD2, CD3, bool> where,
-            SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -17806,63 +10526,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(Func<CD1, CD2, CD3, bool> where,
-            bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -17914,65 +10577,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(Func<CD1, CD2, CD3, CD4, bool> where,
-            SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -18042,64 +10646,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(Func<CD1, CD2, CD3, CD4, bool> where,
-            bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -18152,66 +10698,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(
-            Func<CD1, CD2, CD3, CD4, CD5, bool> where, SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                using (var cd5Cda = eq.ToComponentDataArray<CD5>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i], cd5Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -18283,65 +10769,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(
-            Func<CD1, CD2, CD3, CD4, CD5, bool> where, bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                using (var cd5Cda = eq.ToComponentDataArray<CD5>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i], cd5Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -18395,67 +10822,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(
-            Func<CD1, CD2, CD3, CD4, CD5, CD6, bool> where, SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                using (var cd5Cda = eq.ToComponentDataArray<CD5>(Allocator.TempJob))
-                using (var cd6Cda = eq.ToComponentDataArray<CD6>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i], cd5Cda[i], cd6Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -18520,66 +10886,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(
-            Func<CD1, CD2, CD3, CD4, CD5, CD6, bool> where, bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                using (var cd5Cda = eq.ToComponentDataArray<CD5>(Allocator.TempJob))
-                using (var cd6Cda = eq.ToComponentDataArray<CD6>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i], cd5Cda[i], cd6Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -18748,41 +11054,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -18813,42 +11084,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -18993,41 +11228,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -19058,42 +11258,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -19235,40 +11399,6 @@ namespace E7.EcsGadgets
         /// You can add additional tag components and upto 2 SCD filters to
         /// the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<CD1> ComponentDataArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                return eq.ToComponentDataArray<CD1>(Allocator.Persistent);
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized component data array of the first component.
-        /// You can add additional tag components and upto 2 SCD filters to
-        /// the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -19298,41 +11428,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                return na;
             }
         }
 
@@ -19371,64 +11466,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(Func<CD1, bool> where,
-            SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -19498,64 +11535,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(Func<CD1, bool> where,
-            bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -19617,63 +11596,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(Func<CD1, bool> where,
-            bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -19725,65 +11647,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(Func<CD1, CD2, bool> where,
-            SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -19854,65 +11717,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(Func<CD1, CD2, bool> where,
-            bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -19975,64 +11779,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(Func<CD1, CD2, bool> where,
-            bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -20086,66 +11832,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(
-            Func<CD1, CD2, CD3, bool> where, SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -20217,66 +11903,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(
-            Func<CD1, CD2, CD3, bool> where, bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -20332,65 +11958,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(
-            Func<CD1, CD2, CD3, bool> where, bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -20461,67 +12028,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(
-            Func<CD1, CD2, CD3, CD4, bool> where, SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -20578,67 +12084,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(
-            Func<CD1, CD2, CD3, CD4, bool> where, bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -20711,66 +12156,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(
-            Func<CD1, CD2, CD3, CD4, bool> where, bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -20826,68 +12211,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(
-            Func<CD1, CD2, CD3, CD4, CD5, bool> where, SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                using (var cd5Cda = eq.ToComponentDataArray<CD5>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i], cd5Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -20961,68 +12284,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(
-            Func<CD1, CD2, CD3, CD4, CD5, bool> where, bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                using (var cd5Cda = eq.ToComponentDataArray<CD5>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i], cd5Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -21088,67 +12349,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(
-            Func<CD1, CD2, CD3, CD4, CD5, bool> where, bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                using (var cd5Cda = eq.ToComponentDataArray<CD5>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i], cd5Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -21205,69 +12405,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(
-            Func<CD1, CD2, CD3, CD4, CD5, CD6, bool> where, SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                using (var cd5Cda = eq.ToComponentDataArray<CD5>(Allocator.TempJob))
-                using (var cd6Cda = eq.ToComponentDataArray<CD6>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i], cd5Cda[i], cd6Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 
@@ -21342,69 +12479,6 @@ namespace E7.EcsGadgets
         /// Return a linearized entity array of all components combined into All query.
         /// You can add upto 2 SCD filters to the query.
         /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(
-            Func<CD1, CD2, CD3, CD4, CD5, CD6, bool> where, bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                using (var cd5Cda = eq.ToComponentDataArray<CD5>(Allocator.TempJob))
-                using (var cd6Cda = eq.ToComponentDataArray<CD6>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i], cd5Cda[i], cd6Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
         /// Returns managed array, you don't have to dispose it but
         /// it is not efficient for real use as it produces garbage.
         /// Good for unit testing.
@@ -21463,68 +12537,6 @@ namespace E7.EcsGadgets
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
-            }
-        }
-
-
-        /// <summary>
-        /// Return a linearized entity array of all components combined into All query.
-        /// You can add upto 2 SCD filters to the query.
-        /// 
-        /// You have to dispose the returned native array.
-        /// The returned native array will be allocated with Persistent allocator.
-        /// </summary>
-        public NativeArray<Entity> EntityArray<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(
-            Func<CD1, CD2, CD3, CD4, CD5, CD6, bool> where, bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                var na = eq.ToEntityArray(Allocator.Persistent);
-
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
-                using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
-                using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
-                using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
-                using (var cd4Cda = eq.ToComponentDataArray<CD4>(Allocator.TempJob))
-                using (var cd5Cda = eq.ToComponentDataArray<CD5>(Allocator.TempJob))
-                using (var cd6Cda = eq.ToComponentDataArray<CD6>(Allocator.TempJob))
-                {
-                    for (int i = 0; i < na.Length; i++)
-                    {
-                        if (where(cd1Cda[i], cd2Cda[i], cd3Cda[i], cd4Cda[i], cd5Cda[i], cd6Cda[i]))
-                        {
-                            filtered.Add(na[i]);
-                        }
-                    }
-                }
-
-                na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
-                for (int i = 0; i < filtered.Length; i++)
-                {
-                    na[i] = filtered[i];
-                }
-
-                filtered.Dispose();
-
-                return na;
             }
         }
 

@@ -294,12 +294,12 @@ filtered.Dispose();
 
                         if (tag != 0)
                         {
-                            Do(gsCda);
+                            //Do(gsCda);
                             Do(gsGet);
                         }
                     }
 
-                    Do(gsEa);
+                    //Do(gsEa);
                     Do(gsEntities);
 
                     void Do(string tem)
