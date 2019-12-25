@@ -26,8 +26,8 @@ namespace codegen
         const string gsGetSingleton = @"
 /// <summary>
 /// Like `GetSingleton` in system but usable from outside.
-/// You can add more tag components and SCD constraints via
-/// overloads provided. The first type is always the returning value.
+/// You can add upto 0~6 CD and 0~2 SCD types to the query.
+/// The first type is always the returning value.
 /// </summary>
 public <<MAIN>> GetSingleton<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
 <<WHERE>>
@@ -45,8 +45,8 @@ public <<MAIN>> GetSingleton<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
         const string gsGetSingletonScdFirst = @"
 /// <summary>
 /// Like `GetSingleton` in system but usable from outside.
-/// You can add more tag components and SCD constraints via
-/// overloads provided. The first type is always the returning value.
+/// You can add upto 0~6 CD and 0~2 SCD types to the query.
+/// The first type is always the returning value.
 /// </summary>
 public <<MAIN>> GetSingleton<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
 <<WHERE>>
@@ -65,8 +65,7 @@ public <<MAIN>> GetSingleton<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
         const string gsGetSingletonEntity = @"
 /// <summary>
 /// Like `GetSingletonEntity` in system but usable from outside.
-/// You can add more tag components and SCD constraints via
-/// overloads provided.
+/// You can add upto 0~6 CD and 0~2 SCD types to the query.
 /// </summary>
 public Entity GetSingletonEntity<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
 <<WHERE>>
@@ -83,10 +82,22 @@ public Entity GetSingletonEntity<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
 
         const string gsEntityCount = @"
 /// <summary>
-/// Count entities that are returned from All query of
-/// all components in the overload you choose plus upto
-/// 2 SCD filters.
+/// Count entities that are returned from All query made of all components on generic type arguments.
+/// You can add upto 0~6 CD and 0~2 SCD types to the query.
 /// </summary>
+/// <remarks>
+/// In the argument :
+/// 
+/// - Add a lambda with input argument typed the same as component data specified
+/// in the generic type argument. This is a filter to only work on an entity that
+/// pass the criteria. (Like LINQ's `.Where`) It is possible to specify just a subset
+/// of all component data in the generic type as long as the omitted types come later
+/// when counting from left to right.
+/// 
+/// - Add from 0 to 2 SCD value filter, if you have enough SCD generic type specified.
+/// Use `nf: false` in place of actual value to skip filtering that SCD type.
+/// With that it is possible to use SCD types as one of tag components.
+/// </remarks>
 public int EntityCount<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
 <<WHERE>>
 {
@@ -95,42 +106,19 @@ public int EntityCount<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
     ))
     {
         <<FILTER>>
-        return eq.CalculateEntityCount();
-    }
-}
-";
-
-        const string gsCda = @"
-/// <summary>
-/// Return a linearized component data array of the first component.
-/// You can add additional tag components and upto 2 SCD filters to
-/// the query.
-/// 
-/// You have to dispose the returned native array.
-/// The returned native array will be allocated with Persistent allocator.
-/// </summary>
-public NativeArray<<<MAIN>>> ComponentDataArray<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
-<<WHERE>>
-{
-    using (var eq = em.CreateEntityQuery(
-        <<TYPEVERT>>
-    ))
-    {
-        <<FILTER>>
-         return eq.ToComponentDataArray<<<MAIN>>>(Allocator.Persistent);
+        var na = eq.ToEntityArray(Allocator.Persistent);
+        <<WHEREABLES>>
+        int count = na.Length;
+        na.Dispose();
+        return count;
     }
 }
 ";
 
         const string gsGet = @"
 /// <summary>
-/// Return a linearized component data array of the first component.
-/// You can add additional tag components and upto 2 SCD filters to
-/// the query.
-/// 
-/// Returns managed array, you don't have to dispose it but
-/// it is not efficient for real use as it produces garbage.
-/// Good for unit testing.
+/// Return a linearized component data array of the first component of generic type arguments.
+/// You can add additional components upto 6 CD and upto 2 SCD types to the query.
 /// </summary>
 public <<MAIN>>[] Components<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
 <<WHERE>>
@@ -147,38 +135,24 @@ public <<MAIN>>[] Components<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
     }
 }
 ";
-        const string gsEa = @"
-/// <summary>
-/// Return a linearized entity array of all components combined into All query.
-/// You can add upto 2 SCD filters to the query.
-/// 
-/// You have to dispose the returned native array.
-/// The returned native array will be allocated with Persistent allocator.
-/// </summary>
-public NativeArray<Entity> EntityArray<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
-<<WHERE>>
-{
-    using (var eq = em.CreateEntityQuery(
-        <<TYPEVERT>>
-    ))
-    {
-        <<FILTER>>
-        var na = eq.ToEntityArray(Allocator.Persistent);
-        <<WHEREABLES>>
-        return na;
-    }
-}
-";
-
         const string gsEntities = @"
 /// <summary>
-/// Return a linearized entity array of all components combined into All query.
-/// You can add upto 2 SCD filters to the query.
-/// 
-/// Returns managed array, you don't have to dispose it but
-/// it is not efficient for real use as it produces garbage.
-/// Good for unit testing.
+/// Return a linearized entity array from All query made of all components on generic type arguments.
+/// You can add upto 0~6 CD and 0~2 SCD types to the query.
 /// </summary>
+/// <remarks>
+/// In the argument :
+/// 
+/// - Add a lambda with input argument typed the same as component data specified
+/// in the generic type argument. This is a filter to only work on an entity that
+/// pass the criteria. (Like LINQ's `.Where`) It is possible to specify just a subset
+/// of all component data in the generic type as long as the omitted types come later
+/// when counting from left to right.
+/// 
+/// - Add from 0 to 2 SCD value filter, if you have enough SCD generic type specified.
+/// Use `nf: false` in place of actual value to skip filtering that SCD type.
+/// With that it is possible to use SCD types as one of tag components.
+/// </remarks>
 public Entity[] Entities<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
 <<WHERE>>
 {
@@ -290,16 +264,14 @@ filtered.Dispose();
                         }
 
                         Do(gsGetSingletonEntity);
-                        Do(gsEntityCount);
 
                         if (tag != 0)
                         {
-                            //Do(gsCda);
                             Do(gsGet);
                         }
                     }
 
-                    //Do(gsEa);
+                    Do(gsEntityCount);
                     Do(gsEntities);
 
                     void Do(string tem)
