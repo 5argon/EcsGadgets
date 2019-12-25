@@ -1,22 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Unity.Entities;
 
 namespace E7.EcsGadgets
 {
-    /// <summary>
-    /// Performs higher level, one-off operation on <see cref="EntityManager"/>.
-    /// 
-    /// Many methods allocates
-    /// and immediately dispose <see cref="EntityQuery"/> inside each call.
-    ///
-    /// In normal code, you should properly use `GetEntityQuery` in systems
-    /// so reads are in the dependency chain. However this system independent
-    /// shortcuts are useful for unit testing so you can query and check in one line.
-    ///
-    /// There is no `CompleteAllJobs` inside. There is a chance that it would cause
-    /// error when someone else is reading/writing the same data.
-    /// </summary>
-    public partial class EntityManagerUtility
+    public class EntityManagerUtility
     {
         EntityManager em;
         List<int> scdIndices;
@@ -26,18 +13,6 @@ namespace E7.EcsGadgets
             this.em = world.EntityManager;
             scdIndices = new List<int>();
         }
-
-        /// <summary>
-        /// Query entity with any EQD and count them.
-        /// </summary>
-        public int EntityCount(EntityQueryDesc eqd)
-        {
-            using (var eq = em.CreateEntityQuery(eqd))
-            {
-                return eq.CalculateEntityCount();
-            }
-        }
-
         /// <summary>
         /// Performs a linear search over all existing SCD of a single type to find out the index.
         /// The search equality test is by List.IndexOf
