@@ -65,18 +65,20 @@ public <<MAIN>> GetSingleton<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
         const string gsGetSingletonEntity = @"
 /// <summary>
 /// Like `GetSingletonEntity` in system but usable from outside.
-/// You can add upto 0~6 CD and 0~2 SCD types to the query.
+/// 
+/// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+/// based on any of the CD. Query, SCD filter, and where filter combined must
+/// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
 /// </summary>
 public Entity GetSingletonEntity<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
 <<WHERE>>
 {
-    using (var eq = em.CreateEntityQuery(
-        <<TYPEVERT>>
-    ))
+    var ea = Entities<<<TYPEHOR>>>(<<ARGSFORWARD>>);
+    if (ea.Length != 1)
     {
-        <<FILTER>>
-        return eq.GetSingletonEntity();
+        throw new System.InvalidOperationException($""GetSingletonEntity() requires that exactly one exists but there are { ea.Length }."");
     }
+    return ea[0];
 }
 ";
 
@@ -106,7 +108,7 @@ public int EntityCount<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
     ))
     {
         <<FILTER>>
-        var na = eq.ToEntityArray(Allocator.Persistent);
+        var na = eq.ToEntityArray(Allocator.TempJob);
         <<WHEREABLES>>
         int count = na.Length;
         na.Dispose();
@@ -128,7 +130,7 @@ public <<MAIN>>[] Components<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
     ))
     {
         <<FILTER>>
-        var na = eq.ToComponentDataArray<<<MAIN>>>(Allocator.Persistent);
+        var na = eq.ToComponentDataArray<<<MAIN>>>(Allocator.TempJob);
         var array = na.ToArray();
         na.Dispose();
         return array;
@@ -161,7 +163,7 @@ public Entity[] Entities<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
     ))
     {
         <<FILTER>>
-        var na = eq.ToEntityArray(Allocator.Persistent);
+        var na = eq.ToEntityArray(Allocator.TempJob);
         <<WHEREABLES>>
         var array = na.ToArray();
         na.Dispose();
@@ -171,7 +173,7 @@ public Entity[] Entities<<NOFILTER>><<<TYPEHOR>>>(<<ARGS>>)
 ";
 
         const string whereableCheck = @"
-NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
 <<WHEREABLEUSINGS>>
 {
     for (int i = 0; i < na.Length; i++)
@@ -183,7 +185,7 @@ NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJo
     }
 }
 na.Dispose();
-na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
 for(int i = 0;i<filtered.Length;i++)
 {
     na[i] = filtered[i];
@@ -206,6 +208,7 @@ filtered.Dispose();
                     List<string> whereableWhere = new List<string>();
                     List<string> scds = new List<string>();
                     List<string> args = new List<string>();
+                    List<string> argsForward = new List<string>();
                     List<string> argsFilter = new List<string>();
                     for (int i = 0; i < tag; i++)
                     {
@@ -220,6 +223,7 @@ filtered.Dispose();
                     if (whereable != 0)
                     {
                         args.Add($"Func<{string.Join(",", whereableTypes)}, bool> where");
+                        argsForward.Add("where");
                     }
                     for (int i = 0; i < scd; i++)
                     {
@@ -228,10 +232,12 @@ filtered.Dispose();
                         {
                             scds.Add($"filter{i + 1}");
                             args.Add($"SCD{i + 1} filter{i + 1}");
+                            argsForward.Add($"filter{i + 1}");
                         }
                         else
                         {
                             args.Add($"bool nf{(scd > 1 ? (i + 1).ToString() : string.Empty)}");
+                            argsForward.Add($"nf{(scd > 1 ? (i + 1).ToString() : string.Empty)}");
                         }
                     }
                     string typeHor = string.Join(",", componentTypes);
@@ -263,14 +269,13 @@ filtered.Dispose();
                             Do(gsGetSingletonScdFirst);
                         }
 
-                        Do(gsGetSingletonEntity);
-
                         if (tag != 0)
                         {
                             Do(gsGet);
                         }
                     }
 
+                    Do(gsGetSingletonEntity);
                     Do(gsEntityCount);
                     Do(gsEntities);
 
@@ -281,6 +286,7 @@ filtered.Dispose();
                             .Replace("<<NOFILTER>>", string.Empty)
                             .Replace("<<TYPEHOR>>", typeHor)
                             .Replace("<<ARGS>>", argsString)
+                            .Replace("<<ARGSFORWARD>>", string.Join(",",argsForward))
                             .Replace("<<WHERE>>", wheres)
                             .Replace("<<TYPEVERT>>", typeVert)
                             .Replace("<<FILTER>>", filters)

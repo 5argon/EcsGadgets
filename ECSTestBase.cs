@@ -33,6 +33,12 @@ namespace E7.EcsGadgets
     /// so in the end I just test the world rather than each system, but with objective to test each system in each test.
     /// - Write concise test with only setup related to entities. When you don't have to prop up correct system environment
     /// it may made you more want to write more tests.
+    /// - If you write a unit test, the test often break in compile error
+    /// when you change the system's definition around (and system with its
+    /// modularity encourages this) in a way that it achieves the same result,
+    /// the test was too tight. A world test that aims to unit test a system maybe less prone to
+    /// compile error, instead giving you back a useful red test because overall functionality related to all
+    /// other systems changed.
     ///
     /// Disadvantages :
     /// 
@@ -46,7 +52,11 @@ namespace E7.EcsGadgets
     /// Fall back to single system test when you are not able to handle the state where every systems unpredictably
     /// changing everything. But personally I will try to default to this way as much as possible. When the world
     /// is crowded, separating UPM package maybe the solution to continue testing this way since ECS scans only
-    /// available assembly to populate the world. That way you can limit side effects while still making 
+    /// available assembly to populate the world.
+    ///
+    /// Of course with tons of time you can do both unit system test and world test. But world test is only a little
+    /// bit harder and cover what unit test did really well it is tempting to cut your dev time by half by ignoring
+    /// unit system tests altogether.
     /// </remarks>
     public abstract class ECSTestBase
     {

@@ -35,18 +35,22 @@ namespace E7.EcsGadgets
 
         /// <summary>
         /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
         /// </summary>
         public Entity GetSingletonEntity<SCD1>(SCD1 filter1)
             where SCD1 : struct, ISharedComponentData
         {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<SCD1>()
-            ))
+            var ea = Entities<SCD1>(filter1);
+            if (ea.Length != 1)
             {
-                eq.SetSharedComponentFilter(filter1);
-                return eq.GetSingletonEntity();
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
             }
+
+            return ea[0];
         }
 
 
@@ -75,7 +79,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -109,7 +113,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
@@ -137,17 +141,22 @@ namespace E7.EcsGadgets
 
         /// <summary>
         /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
         /// </summary>
         public Entity GetSingletonEntity<SCD1>(bool nf)
             where SCD1 : struct, ISharedComponentData
         {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<SCD1>()
-            ))
+            var ea = Entities<SCD1>(nf);
+            if (ea.Length != 1)
             {
-                return eq.GetSingletonEntity();
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
             }
+
+            return ea[0];
         }
 
 
@@ -175,7 +184,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -208,7 +217,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
@@ -239,20 +248,23 @@ namespace E7.EcsGadgets
 
         /// <summary>
         /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
         /// </summary>
         public Entity GetSingletonEntity<SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
             where SCD1 : struct, ISharedComponentData
             where SCD2 : struct, ISharedComponentData
         {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
+            var ea = Entities<SCD1, SCD2>(filter1, filter2);
+            if (ea.Length != 1)
             {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                return eq.GetSingletonEntity();
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
             }
+
+            return ea[0];
         }
 
 
@@ -283,7 +295,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -319,7 +331,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
@@ -350,20 +362,23 @@ namespace E7.EcsGadgets
 
         /// <summary>
         /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
         /// </summary>
         public Entity GetSingletonEntity<SCD1, SCD2>(bool nf1, SCD2 filter2)
             where SCD1 : struct, ISharedComponentData
             where SCD2 : struct, ISharedComponentData
         {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
+            var ea = Entities<SCD1, SCD2>(nf1, filter2);
+            if (ea.Length != 1)
             {
-                eq.SetSharedComponentFilter(filter2);
-                return eq.GetSingletonEntity();
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
             }
+
+            return ea[0];
         }
 
 
@@ -394,7 +409,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -430,7 +445,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
@@ -460,19 +475,23 @@ namespace E7.EcsGadgets
 
         /// <summary>
         /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
         /// </summary>
         public Entity GetSingletonEntity<SCD1, SCD2>(bool nf1, bool nf2)
             where SCD1 : struct, ISharedComponentData
             where SCD2 : struct, ISharedComponentData
         {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
+            var ea = Entities<SCD1, SCD2>(nf1, nf2);
+            if (ea.Length != 1)
             {
-                return eq.GetSingletonEntity();
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
             }
+
+            return ea[0];
         }
 
 
@@ -502,7 +521,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -537,7 +556,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
@@ -564,22 +583,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1>()
-            where CD1 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>()
-            ))
-            {
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -590,11 +593,32 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD1>()
             ))
             {
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1>()
+            where CD1 : struct, IComponentData
+        {
+            var ea = Entities<CD1>();
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -622,7 +646,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -655,12 +679,33 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1>(Func<CD1, bool> where)
+            where CD1 : struct, IComponentData
+        {
+            var ea = Entities<CD1>(where);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -688,9 +733,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -703,7 +748,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -742,9 +787,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -757,7 +802,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -793,25 +838,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, SCD1>(SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -825,11 +851,33 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, SCD1>(SCD1 filter1)
+            where CD1 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, SCD1>(filter1);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -860,7 +908,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -896,7 +944,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
@@ -925,24 +973,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, SCD1>(bool nf)
-            where CD1 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -955,11 +985,33 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, SCD1>(bool nf)
+            where CD1 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, SCD1>(nf);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -989,7 +1041,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -1024,12 +1076,34 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, SCD1>(Func<CD1, bool> where, SCD1 filter1)
+            where CD1 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, SCD1>(where, filter1);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -1060,9 +1134,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -1075,7 +1149,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -1117,9 +1191,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -1132,7 +1206,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -1144,6 +1218,28 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, SCD1>(Func<CD1, bool> where, bool nf)
+            where CD1 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, SCD1>(where, nf);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -1173,9 +1269,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -1188,7 +1284,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -1229,9 +1325,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -1244,7 +1340,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -1282,27 +1378,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -1318,11 +1393,34 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, SCD1, SCD2>(filter1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -1355,7 +1453,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -1393,7 +1491,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
@@ -1425,27 +1523,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, SCD1, SCD2>(bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -1461,11 +1538,34 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, SCD1, SCD2>(bool nf1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, SCD1, SCD2>(nf1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -1498,7 +1598,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -1536,7 +1636,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
@@ -1567,26 +1667,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, SCD1, SCD2>(bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -1601,11 +1681,34 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, SCD1, SCD2>(bool nf1, bool nf2)
+            where CD1 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, SCD1, SCD2>(nf1, nf2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -1637,7 +1740,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -1674,12 +1777,35 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, SCD1, SCD2>(Func<CD1, bool> where, SCD1 filter1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, SCD1, SCD2>(where, filter1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -1712,9 +1838,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -1727,7 +1853,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -1771,9 +1897,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -1786,7 +1912,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -1798,6 +1924,29 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, SCD1, SCD2>(Func<CD1, bool> where, bool nf1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, SCD1, SCD2>(where, nf1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -1830,9 +1979,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -1845,7 +1994,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -1889,9 +2038,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -1904,7 +2053,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -1916,6 +2065,29 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, SCD1, SCD2>(Func<CD1, bool> where, bool nf1, bool nf2)
+            where CD1 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, SCD1, SCD2>(where, nf1, nf2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -1947,9 +2119,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -1962,7 +2134,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -2005,9 +2177,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -2020,7 +2192,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -2055,24 +2227,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2>()
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>()
-            ))
-            {
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -2085,11 +2239,33 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD2>()
             ))
             {
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2>()
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+        {
+            var ea = Entities<CD1, CD2>();
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -2119,7 +2295,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -2154,12 +2330,34 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2>(Func<CD1, bool> where)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+        {
+            var ea = Entities<CD1, CD2>(where);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -2189,9 +2387,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -2204,7 +2402,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -2245,9 +2443,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -2260,7 +2458,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -2272,6 +2470,28 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2>(Func<CD1, CD2, bool> where)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+        {
+            var ea = Entities<CD1, CD2>(where);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -2301,9 +2521,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -2317,7 +2537,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -2358,9 +2578,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -2374,7 +2594,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -2412,27 +2632,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2, SCD1>(SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -2448,11 +2647,34 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, SCD1>(SCD1 filter1)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, SCD1>(filter1);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -2485,7 +2707,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -2523,7 +2745,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
@@ -2554,26 +2776,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2, SCD1>(bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -2588,11 +2790,34 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, SCD1>(bool nf)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, SCD1>(nf);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -2624,7 +2849,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -2661,12 +2886,35 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, SCD1>(Func<CD1, bool> where, SCD1 filter1)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, SCD1>(where, filter1);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -2699,9 +2947,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -2714,7 +2962,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -2758,9 +3006,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -2773,7 +3021,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -2785,6 +3033,29 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, SCD1>(Func<CD1, bool> where, bool nf)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, SCD1>(where, nf);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -2816,9 +3087,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -2831,7 +3102,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -2874,9 +3145,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -2889,7 +3160,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -2901,6 +3172,29 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, SCD1>(Func<CD1, CD2, bool> where, SCD1 filter1)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, SCD1>(where, filter1);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -2933,9 +3227,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -2949,7 +3243,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -2993,9 +3287,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -3009,7 +3303,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -3021,6 +3315,29 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, SCD1>(Func<CD1, CD2, bool> where, bool nf)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, SCD1>(where, nf);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -3052,9 +3369,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -3068,7 +3385,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -3111,9 +3428,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -3127,7 +3444,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -3167,29 +3484,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -3207,11 +3501,35 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, SCD1, SCD2>(filter1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -3246,7 +3564,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -3286,7 +3604,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
@@ -3320,29 +3638,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2, SCD1, SCD2>(bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -3360,11 +3655,35 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, SCD1, SCD2>(bool nf1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, SCD1, SCD2>(nf1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -3399,7 +3718,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -3439,7 +3758,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
@@ -3472,28 +3791,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2, SCD1, SCD2>(bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -3510,11 +3807,35 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, SCD1, SCD2>(bool nf1, bool nf2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, SCD1, SCD2>(nf1, nf2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -3548,7 +3869,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -3587,12 +3908,36 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, SCD1, SCD2>(Func<CD1, bool> where, SCD1 filter1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, SCD1, SCD2>(where, filter1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -3627,9 +3972,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -3642,7 +3987,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -3688,9 +4033,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -3703,7 +4048,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -3715,6 +4060,30 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, SCD1, SCD2>(Func<CD1, bool> where, bool nf1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, SCD1, SCD2>(where, nf1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -3749,9 +4118,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -3764,7 +4133,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -3810,9 +4179,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -3825,7 +4194,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -3837,6 +4206,30 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, SCD1, SCD2>(Func<CD1, bool> where, bool nf1, bool nf2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, SCD1, SCD2>(where, nf1, nf2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -3870,9 +4263,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -3885,7 +4278,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -3930,9 +4323,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -3945,7 +4338,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -3957,6 +4350,30 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, SCD1, SCD2>(Func<CD1, CD2, bool> where, SCD1 filter1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, SCD1, SCD2>(where, filter1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -3991,9 +4408,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -4007,7 +4424,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -4053,9 +4470,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -4069,7 +4486,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -4081,6 +4498,30 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, SCD1, SCD2>(Func<CD1, CD2, bool> where, bool nf1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, SCD1, SCD2>(where, nf1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -4115,9 +4556,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -4131,7 +4572,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -4177,9 +4618,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -4193,7 +4634,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -4205,6 +4646,30 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, SCD1, SCD2>(Func<CD1, CD2, bool> where, bool nf1, bool nf2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, SCD1, SCD2>(where, nf1, nf2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -4238,9 +4703,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -4254,7 +4719,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -4299,9 +4764,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -4315,7 +4780,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -4352,26 +4817,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2, CD3>()
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>()
-            ))
-            {
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -4386,11 +4831,34 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD3>()
             ))
             {
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3>()
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3>();
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -4422,7 +4890,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD3>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -4459,12 +4927,35 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD3>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3>(Func<CD1, bool> where)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3>(where);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -4496,9 +4987,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD3>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -4511,7 +5002,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -4554,9 +5045,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD3>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -4569,7 +5060,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -4581,6 +5072,29 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3>(Func<CD1, CD2, bool> where)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3>(where);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -4612,9 +5126,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD3>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -4628,7 +5142,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -4671,9 +5185,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD3>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -4687,7 +5201,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -4699,6 +5213,29 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3>(Func<CD1, CD2, CD3, bool> where)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3>(where);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -4730,9 +5267,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD3>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -4747,7 +5284,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -4790,9 +5327,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD3>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -4807,7 +5344,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -4847,29 +5384,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2, CD3, SCD1>(SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -4887,11 +5401,35 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, SCD1>(SCD1 filter1)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, SCD1>(filter1);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -4926,7 +5464,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -4966,7 +5504,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
@@ -4999,28 +5537,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2, CD3, SCD1>(bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -5037,11 +5553,35 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, SCD1>(bool nf)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, SCD1>(nf);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -5075,7 +5615,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -5114,12 +5654,36 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, SCD1>(Func<CD1, bool> where, SCD1 filter1)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, SCD1>(where, filter1);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -5154,9 +5718,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -5169,7 +5733,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -5215,9 +5779,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -5230,7 +5794,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -5242,6 +5806,30 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, SCD1>(Func<CD1, bool> where, bool nf)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, SCD1>(where, nf);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -5275,9 +5863,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -5290,7 +5878,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -5335,9 +5923,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -5350,7 +5938,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -5362,6 +5950,30 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, SCD1>(Func<CD1, CD2, bool> where, SCD1 filter1)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, SCD1>(where, filter1);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -5396,9 +6008,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -5412,7 +6024,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -5458,9 +6070,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -5474,7 +6086,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -5486,6 +6098,30 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, SCD1>(Func<CD1, CD2, bool> where, bool nf)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, SCD1>(where, nf);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -5519,9 +6155,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -5535,7 +6171,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -5580,9 +6216,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -5596,7 +6232,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -5608,6 +6244,30 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, SCD1>(Func<CD1, CD2, CD3, bool> where, SCD1 filter1)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, SCD1>(where, filter1);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -5642,9 +6302,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -5659,7 +6319,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -5705,9 +6365,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -5722,7 +6382,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -5734,6 +6394,30 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, SCD1>(Func<CD1, CD2, CD3, bool> where, bool nf)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, SCD1>(where, nf);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -5767,9 +6451,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -5784,7 +6468,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -5829,9 +6513,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -5846,7 +6530,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -5888,31 +6572,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2, CD3, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -5932,11 +6591,36 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, SCD1, SCD2>(filter1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -5973,7 +6657,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -6015,7 +6699,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
@@ -6051,31 +6735,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2, CD3, SCD1, SCD2>(bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -6095,11 +6754,36 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, SCD1, SCD2>(bool nf1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, SCD1, SCD2>(nf1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -6136,7 +6820,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -6178,7 +6862,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
@@ -6213,30 +6897,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2, CD3, SCD1, SCD2>(bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -6255,11 +6915,36 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, SCD1, SCD2>(bool nf1, bool nf2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, SCD1, SCD2>(nf1, nf2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -6295,7 +6980,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -6336,12 +7021,37 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, SCD1, SCD2>(Func<CD1, bool> where, SCD1 filter1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, SCD1, SCD2>(where, filter1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -6378,9 +7088,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -6393,7 +7103,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -6441,9 +7151,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -6456,7 +7166,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -6468,6 +7178,31 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, SCD1, SCD2>(Func<CD1, bool> where, bool nf1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, SCD1, SCD2>(where, nf1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -6504,9 +7239,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -6519,7 +7254,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -6567,9 +7302,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -6582,7 +7317,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -6594,6 +7329,31 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, SCD1, SCD2>(Func<CD1, bool> where, bool nf1, bool nf2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, SCD1, SCD2>(where, nf1, nf2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -6629,9 +7389,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -6644,7 +7404,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -6691,9 +7451,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -6706,7 +7466,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -6718,6 +7478,32 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, SCD1, SCD2>(Func<CD1, CD2, bool> where, SCD1 filter1,
+            SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, SCD1, SCD2>(where, filter1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -6754,9 +7540,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -6770,7 +7556,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -6818,9 +7604,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -6834,7 +7620,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -6846,6 +7632,31 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, SCD1, SCD2>(Func<CD1, CD2, bool> where, bool nf1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, SCD1, SCD2>(where, nf1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -6882,9 +7693,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -6898,7 +7709,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -6946,9 +7757,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -6962,7 +7773,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -6974,6 +7785,31 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, SCD1, SCD2>(Func<CD1, CD2, bool> where, bool nf1, bool nf2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, SCD1, SCD2>(where, nf1, nf2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -7009,9 +7845,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -7025,7 +7861,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -7072,9 +7908,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -7088,7 +7924,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -7100,6 +7936,32 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, SCD1, SCD2>(Func<CD1, CD2, CD3, bool> where, SCD1 filter1,
+            SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, SCD1, SCD2>(where, filter1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -7136,9 +7998,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -7153,7 +8015,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -7201,9 +8063,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -7218,7 +8080,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -7230,6 +8092,32 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, SCD1, SCD2>(Func<CD1, CD2, CD3, bool> where, bool nf1,
+            SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, SCD1, SCD2>(where, nf1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -7266,9 +8154,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -7283,7 +8171,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -7331,9 +8219,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -7348,7 +8236,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -7360,6 +8248,31 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, SCD1, SCD2>(Func<CD1, CD2, CD3, bool> where, bool nf1, bool nf2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, SCD1, SCD2>(where, nf1, nf2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -7395,9 +8308,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -7412,7 +8325,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -7459,9 +8372,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -7476,7 +8389,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -7515,28 +8428,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4>()
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>()
-            ))
-            {
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -7553,11 +8444,35 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD4>()
             ))
             {
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4>()
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4>();
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -7591,7 +8506,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD4>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -7630,12 +8545,36 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD4>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4>(Func<CD1, bool> where)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4>(where);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -7669,9 +8608,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD4>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -7684,7 +8623,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -7729,9 +8668,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD4>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -7744,7 +8683,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -7756,6 +8695,30 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4>(Func<CD1, CD2, bool> where)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4>(where);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -7789,9 +8752,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD4>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -7805,7 +8768,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -7850,9 +8813,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD4>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -7866,7 +8829,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -7878,6 +8841,30 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4>(Func<CD1, CD2, CD3, bool> where)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4>(where);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -7911,9 +8898,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD4>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -7928,7 +8915,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -7973,9 +8960,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD4>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -7990,7 +8977,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -8002,6 +8989,30 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4>(Func<CD1, CD2, CD3, CD4, bool> where)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4>(where);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -8035,9 +9046,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD4>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -8053,7 +9064,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -8098,9 +9109,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD4>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -8116,7 +9127,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -8158,31 +9169,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1>(SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -8202,11 +9188,36 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1>(SCD1 filter1)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, SCD1>(filter1);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -8243,7 +9254,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -8285,7 +9296,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
@@ -8320,30 +9331,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1>(bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -8362,11 +9349,36 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1>(bool nf)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, SCD1>(nf);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -8402,7 +9414,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -8443,12 +9455,37 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1>(Func<CD1, bool> where, SCD1 filter1)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, SCD1>(where, filter1);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -8485,9 +9522,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -8500,7 +9537,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -8548,9 +9585,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -8563,7 +9600,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -8575,6 +9612,31 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1>(Func<CD1, bool> where, bool nf)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, SCD1>(where, nf);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -8610,9 +9672,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -8625,7 +9687,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -8672,9 +9734,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -8687,7 +9749,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -8699,6 +9761,31 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1>(Func<CD1, CD2, bool> where, SCD1 filter1)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, SCD1>(where, filter1);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -8735,9 +9822,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -8751,7 +9838,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -8799,9 +9886,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -8815,7 +9902,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -8827,6 +9914,31 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1>(Func<CD1, CD2, bool> where, bool nf)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, SCD1>(where, nf);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -8862,9 +9974,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -8878,7 +9990,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -8925,9 +10037,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -8941,7 +10053,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -8953,6 +10065,31 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1>(Func<CD1, CD2, CD3, bool> where, SCD1 filter1)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, SCD1>(where, filter1);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -8989,9 +10126,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -9006,7 +10143,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -9054,9 +10191,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -9071,7 +10208,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -9083,6 +10220,31 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1>(Func<CD1, CD2, CD3, bool> where, bool nf)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, SCD1>(where, nf);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -9118,9 +10280,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -9135,7 +10297,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -9182,9 +10344,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -9199,7 +10361,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -9211,6 +10373,31 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1>(Func<CD1, CD2, CD3, CD4, bool> where, SCD1 filter1)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, SCD1>(where, filter1);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -9247,9 +10434,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -9265,7 +10452,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -9313,9 +10500,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -9331,7 +10518,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -9343,6 +10530,31 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1>(Func<CD1, CD2, CD3, CD4, bool> where, bool nf)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, SCD1>(where, nf);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -9378,9 +10590,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -9396,7 +10608,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -9443,9 +10655,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -9461,7 +10673,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -9505,33 +10717,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -9553,11 +10738,37 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, SCD1, SCD2>(filter1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -9596,7 +10807,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -9640,7 +10851,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
@@ -9678,33 +10889,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1, SCD2>(bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -9726,11 +10910,37 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1, SCD2>(bool nf1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, SCD1, SCD2>(nf1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -9769,7 +10979,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -9813,7 +11023,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
@@ -9850,32 +11060,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1, SCD2>(bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -9896,11 +11080,37 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1, SCD2>(bool nf1, bool nf2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, SCD1, SCD2>(nf1, nf2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -9938,7 +11148,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -9981,12 +11191,39 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1, SCD2>(Func<CD1, bool> where, SCD1 filter1,
+            SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, SCD1, SCD2>(where, filter1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -10025,9 +11262,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -10040,7 +11277,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -10090,9 +11327,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -10105,7 +11342,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -10117,6 +11354,32 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1, SCD2>(Func<CD1, bool> where, bool nf1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, SCD1, SCD2>(where, nf1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -10155,9 +11418,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -10170,7 +11433,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -10220,9 +11483,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -10235,7 +11498,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -10247,6 +11510,32 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1, SCD2>(Func<CD1, bool> where, bool nf1, bool nf2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, SCD1, SCD2>(where, nf1, nf2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -10284,9 +11573,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -10299,7 +11588,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -10348,9 +11637,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -10363,7 +11652,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -10375,6 +11664,33 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1, SCD2>(Func<CD1, CD2, bool> where, SCD1 filter1,
+            SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, SCD1, SCD2>(where, filter1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -10413,9 +11729,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -10429,7 +11745,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -10479,9 +11795,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -10495,7 +11811,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -10507,6 +11823,33 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1, SCD2>(Func<CD1, CD2, bool> where, bool nf1,
+            SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, SCD1, SCD2>(where, nf1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -10545,9 +11888,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -10561,7 +11904,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -10611,9 +11954,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -10627,7 +11970,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -10639,6 +11982,32 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1, SCD2>(Func<CD1, CD2, bool> where, bool nf1, bool nf2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, SCD1, SCD2>(where, nf1, nf2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -10676,9 +12045,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -10692,7 +12061,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -10741,9 +12110,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -10757,7 +12126,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -10769,6 +12138,33 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1, SCD2>(Func<CD1, CD2, CD3, bool> where, SCD1 filter1,
+            SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, SCD1, SCD2>(where, filter1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -10808,9 +12204,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -10825,7 +12221,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -10876,9 +12272,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -10893,7 +12289,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -10905,6 +12301,33 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1, SCD2>(Func<CD1, CD2, CD3, bool> where, bool nf1,
+            SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, SCD1, SCD2>(where, nf1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -10943,9 +12366,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -10960,7 +12383,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -11011,9 +12434,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -11028,7 +12451,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -11040,6 +12463,33 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1, SCD2>(Func<CD1, CD2, CD3, bool> where, bool nf1,
+            bool nf2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, SCD1, SCD2>(where, nf1, nf2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -11077,9 +12527,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -11094,7 +12544,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -11143,9 +12593,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -11160,7 +12610,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -11172,6 +12622,33 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1, SCD2>(Func<CD1, CD2, CD3, CD4, bool> where,
+            SCD1 filter1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, SCD1, SCD2>(where, filter1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -11211,9 +12688,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -11229,7 +12706,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -11280,9 +12757,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -11298,7 +12775,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -11310,6 +12787,33 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1, SCD2>(Func<CD1, CD2, CD3, CD4, bool> where, bool nf1,
+            SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, SCD1, SCD2>(where, nf1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -11349,9 +12853,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -11367,7 +12871,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -11418,9 +12922,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -11436,7 +12940,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -11448,6 +12952,33 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, SCD1, SCD2>(Func<CD1, CD2, CD3, CD4, bool> where, bool nf1,
+            bool nf2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, SCD1, SCD2>(where, nf1, nf2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -11485,9 +13016,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -11503,7 +13034,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -11553,9 +13084,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -11571,7 +13102,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -11612,30 +13143,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5>()
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>()
-            ))
-            {
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -11654,11 +13161,36 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD5>()
             ))
             {
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5>()
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5>();
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -11694,7 +13226,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD5>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -11735,12 +13267,37 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD5>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5>(Func<CD1, bool> where)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5>(where);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -11776,9 +13333,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD5>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -11791,7 +13348,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -11838,9 +13395,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD5>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -11853,7 +13410,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -11865,6 +13422,31 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5>(Func<CD1, CD2, bool> where)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5>(where);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -11900,9 +13482,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD5>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -11916,7 +13498,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -11963,9 +13545,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD5>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -11979,7 +13561,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -11991,6 +13573,31 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5>(Func<CD1, CD2, CD3, bool> where)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5>(where);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -12026,9 +13633,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD5>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -12043,7 +13650,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -12090,9 +13697,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD5>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -12107,7 +13714,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -12119,6 +13726,31 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5>(Func<CD1, CD2, CD3, CD4, bool> where)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5>(where);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -12154,9 +13786,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD5>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -12172,7 +13804,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -12219,9 +13851,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD5>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -12237,7 +13869,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -12249,6 +13881,31 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5>(Func<CD1, CD2, CD3, CD4, CD5, bool> where)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5>(where);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -12284,9 +13941,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD5>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -12303,7 +13960,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -12350,9 +14007,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD5>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -12369,7 +14026,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -12413,33 +14070,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1>(SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -12461,11 +14091,37 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1>(SCD1 filter1)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1>(filter1);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -12504,7 +14160,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -12548,7 +14204,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
@@ -12585,32 +14241,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1>(bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -12631,11 +14261,37 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1>(bool nf)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1>(nf);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -12673,7 +14329,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -12716,12 +14372,38 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1>(Func<CD1, bool> where, SCD1 filter1)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1>(where, filter1);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -12760,9 +14442,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -12775,7 +14457,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -12825,9 +14507,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -12840,7 +14522,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -12852,6 +14534,32 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1>(Func<CD1, bool> where, bool nf)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1>(where, nf);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -12889,9 +14597,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -12904,7 +14612,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -12953,9 +14661,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -12968,7 +14676,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -12980,6 +14688,32 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1>(Func<CD1, CD2, bool> where, SCD1 filter1)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1>(where, filter1);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -13018,9 +14752,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -13034,7 +14768,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -13084,9 +14818,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -13100,7 +14834,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -13112,6 +14846,32 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1>(Func<CD1, CD2, bool> where, bool nf)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1>(where, nf);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -13149,9 +14909,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -13165,7 +14925,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -13214,9 +14974,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -13230,7 +14990,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -13242,6 +15002,32 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1>(Func<CD1, CD2, CD3, bool> where, SCD1 filter1)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1>(where, filter1);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -13280,9 +15066,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -13297,7 +15083,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -13347,9 +15133,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -13364,7 +15150,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -13376,6 +15162,32 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1>(Func<CD1, CD2, CD3, bool> where, bool nf)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1>(where, nf);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -13413,9 +15225,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -13430,7 +15242,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -13479,9 +15291,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -13496,7 +15308,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -13508,6 +15320,33 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1>(Func<CD1, CD2, CD3, CD4, bool> where,
+            SCD1 filter1)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1>(where, filter1);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -13546,9 +15385,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -13564,7 +15403,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -13614,9 +15453,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -13632,7 +15471,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -13644,6 +15483,32 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1>(Func<CD1, CD2, CD3, CD4, bool> where, bool nf)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1>(where, nf);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -13681,9 +15546,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -13699,7 +15564,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -13748,9 +15613,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -13766,7 +15631,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -13778,6 +15643,33 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1>(Func<CD1, CD2, CD3, CD4, CD5, bool> where,
+            SCD1 filter1)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1>(where, filter1);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -13816,9 +15708,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -13835,7 +15727,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -13885,9 +15777,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -13904,7 +15796,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -13916,6 +15808,33 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1>(Func<CD1, CD2, CD3, CD4, CD5, bool> where,
+            bool nf)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1>(where, nf);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -13953,9 +15872,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -13972,7 +15891,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -14021,9 +15940,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -14040,7 +15959,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -14086,35 +16005,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -14138,11 +16028,38 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(filter1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -14183,7 +16100,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -14229,7 +16146,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
@@ -14269,35 +16186,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -14321,11 +16209,38 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(bool nf1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(nf1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -14366,7 +16281,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -14412,7 +16327,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
@@ -14451,34 +16366,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -14501,11 +16388,38 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(bool nf1, bool nf2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(nf1, nf2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -14545,7 +16459,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -14590,12 +16504,40 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(Func<CD1, bool> where, SCD1 filter1,
+            SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(where, filter1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -14636,9 +16578,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -14651,7 +16593,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -14703,9 +16645,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -14718,7 +16660,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -14730,6 +16672,34 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(Func<CD1, bool> where, bool nf1,
+            SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(where, nf1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -14770,9 +16740,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -14785,7 +16755,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -14837,9 +16807,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -14852,7 +16822,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -14864,6 +16834,33 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(Func<CD1, bool> where, bool nf1, bool nf2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(where, nf1, nf2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -14903,9 +16900,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -14918,7 +16915,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -14969,9 +16966,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -14984,7 +16981,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -14996,6 +16993,34 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(Func<CD1, CD2, bool> where, SCD1 filter1,
+            SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(where, filter1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -15037,9 +17062,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -15053,7 +17078,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -15106,9 +17131,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -15122,7 +17147,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -15134,6 +17159,34 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(Func<CD1, CD2, bool> where, bool nf1,
+            SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(where, nf1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -15174,9 +17227,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -15190,7 +17243,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -15243,9 +17296,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -15259,7 +17312,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -15271,6 +17324,34 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(Func<CD1, CD2, bool> where, bool nf1,
+            bool nf2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(where, nf1, nf2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -15310,9 +17391,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -15326,7 +17407,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -15377,9 +17458,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -15393,7 +17474,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -15405,6 +17486,34 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(Func<CD1, CD2, CD3, bool> where,
+            SCD1 filter1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(where, filter1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -15446,9 +17555,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -15463,7 +17572,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -15516,9 +17625,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -15533,7 +17642,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -15545,6 +17654,34 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(Func<CD1, CD2, CD3, bool> where, bool nf1,
+            SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(where, nf1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -15586,9 +17723,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -15603,7 +17740,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -15656,9 +17793,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -15673,7 +17810,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -15685,6 +17822,34 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(Func<CD1, CD2, CD3, bool> where, bool nf1,
+            bool nf2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(where, nf1, nf2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -15724,9 +17889,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -15741,7 +17906,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -15793,9 +17958,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -15810,7 +17975,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -15822,6 +17987,34 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(Func<CD1, CD2, CD3, CD4, bool> where,
+            SCD1 filter1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(where, filter1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -15863,9 +18056,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -15881,7 +18074,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -15934,9 +18127,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -15952,7 +18145,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -15964,6 +18157,34 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(Func<CD1, CD2, CD3, CD4, bool> where,
+            bool nf1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(where, nf1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -16005,9 +18226,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -16023,7 +18244,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -16076,9 +18297,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -16094,7 +18315,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -16106,6 +18327,34 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(Func<CD1, CD2, CD3, CD4, bool> where,
+            bool nf1, bool nf2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(where, nf1, nf2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -16146,9 +18395,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -16164,7 +18413,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -16216,9 +18465,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -16234,7 +18483,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -16246,6 +18495,34 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(Func<CD1, CD2, CD3, CD4, CD5, bool> where,
+            SCD1 filter1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(where, filter1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -16287,9 +18564,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -16306,7 +18583,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -16359,9 +18636,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -16378,7 +18655,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -16390,6 +18667,34 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(Func<CD1, CD2, CD3, CD4, CD5, bool> where,
+            bool nf1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(where, nf1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -16431,9 +18736,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -16450,7 +18755,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -16503,9 +18808,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -16522,7 +18827,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -16534,6 +18839,34 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(Func<CD1, CD2, CD3, CD4, CD5, bool> where,
+            bool nf1, bool nf2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, SCD1, SCD2>(where, nf1, nf2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -16574,9 +18907,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -16593,7 +18926,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -16645,9 +18978,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -16664,7 +18997,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -16707,32 +19040,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6>()
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>()
-            ))
-            {
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -16753,11 +19060,37 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD6>()
             ))
             {
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6>()
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6>();
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -16795,7 +19128,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD6>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -16838,12 +19171,38 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD6>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6>(Func<CD1, bool> where)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6>(where);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -16881,9 +19240,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD6>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -16896,7 +19255,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -16945,9 +19304,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD6>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -16960,7 +19319,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -16972,6 +19331,32 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6>(Func<CD1, CD2, bool> where)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6>(where);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -17009,9 +19394,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD6>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -17025,7 +19410,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -17074,9 +19459,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD6>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -17090,7 +19475,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -17102,6 +19487,32 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6>(Func<CD1, CD2, CD3, bool> where)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6>(where);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -17139,9 +19550,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD6>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -17156,7 +19567,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -17205,9 +19616,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD6>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -17222,7 +19633,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -17234,6 +19645,32 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6>(Func<CD1, CD2, CD3, CD4, bool> where)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6>(where);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -17271,9 +19708,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD6>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -17289,7 +19726,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -17338,9 +19775,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD6>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -17356,7 +19793,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -17368,6 +19805,32 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6>(Func<CD1, CD2, CD3, CD4, CD5, bool> where)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6>(where);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -17405,9 +19868,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD6>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -17424,7 +19887,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -17473,9 +19936,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD6>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -17492,7 +19955,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -17504,6 +19967,32 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6>(Func<CD1, CD2, CD3, CD4, CD5, CD6, bool> where)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6>(where);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -17541,9 +20030,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD6>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -17561,7 +20050,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -17610,9 +20099,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<CD6>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -17630,7 +20119,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -17676,35 +20165,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(SCD1 filter1)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1);
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -17728,11 +20188,38 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(SCD1 filter1)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(filter1);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -17773,7 +20260,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -17819,7 +20306,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
@@ -17858,34 +20345,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(bool nf)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>()
-            ))
-            {
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -17908,11 +20367,38 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(bool nf)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(nf);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -17952,7 +20438,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -17997,12 +20483,39 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(Func<CD1, bool> where, SCD1 filter1)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(where, filter1);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -18043,9 +20556,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -18058,7 +20571,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -18110,9 +20623,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -18125,7 +20638,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -18137,6 +20650,33 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(Func<CD1, bool> where, bool nf)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(where, nf);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -18176,9 +20716,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -18191,7 +20731,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -18242,9 +20782,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -18257,7 +20797,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -18269,6 +20809,33 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(Func<CD1, CD2, bool> where, SCD1 filter1)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(where, filter1);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -18309,9 +20876,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -18325,7 +20892,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -18377,9 +20944,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -18393,7 +20960,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -18405,6 +20972,33 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(Func<CD1, CD2, bool> where, bool nf)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(where, nf);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -18444,9 +21038,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -18460,7 +21054,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -18511,9 +21105,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -18527,7 +21121,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -18539,6 +21133,34 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(Func<CD1, CD2, CD3, bool> where,
+            SCD1 filter1)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(where, filter1);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -18579,9 +21201,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -18596,7 +21218,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -18648,9 +21270,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -18665,7 +21287,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -18677,6 +21299,33 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(Func<CD1, CD2, CD3, bool> where, bool nf)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(where, nf);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -18716,9 +21365,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -18733,7 +21382,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -18784,9 +21433,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -18801,7 +21450,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -18813,6 +21462,34 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(Func<CD1, CD2, CD3, CD4, bool> where,
+            SCD1 filter1)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(where, filter1);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -18853,9 +21530,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -18871,7 +21548,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -18923,9 +21600,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -18941,7 +21618,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -18953,6 +21630,34 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(Func<CD1, CD2, CD3, CD4, bool> where,
+            bool nf)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(where, nf);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -18992,9 +21697,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -19010,7 +21715,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -19061,9 +21766,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -19079,7 +21784,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -19091,6 +21796,34 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(Func<CD1, CD2, CD3, CD4, CD5, bool> where,
+            SCD1 filter1)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(where, filter1);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -19132,9 +21865,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -19151,7 +21884,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -19204,9 +21937,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -19223,7 +21956,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -19235,6 +21968,34 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(Func<CD1, CD2, CD3, CD4, CD5, bool> where,
+            bool nf)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(where, nf);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -19274,9 +22035,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -19293,7 +22054,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -19344,9 +22105,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -19363,7 +22124,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -19375,6 +22136,34 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(
+            Func<CD1, CD2, CD3, CD4, CD5, CD6, bool> where, SCD1 filter1)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(where, filter1);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -19416,9 +22205,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -19436,7 +22225,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -19489,9 +22278,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -19509,7 +22298,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -19521,6 +22310,34 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(
+            Func<CD1, CD2, CD3, CD4, CD5, CD6, bool> where, bool nf)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1>(where, nf);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -19561,9 +22378,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -19581,7 +22398,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -19633,9 +22450,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD1>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -19653,7 +22470,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -19701,37 +22518,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter1, filter2);
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -19757,11 +22543,39 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(SCD1 filter1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(filter1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -19804,7 +22618,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -19852,7 +22666,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
@@ -19894,37 +22708,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(bool nf1, SCD2 filter2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                eq.SetSharedComponentFilter(filter2);
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -19950,11 +22733,39 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(bool nf1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(nf1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -19997,7 +22808,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -20045,7 +22856,7 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
@@ -20086,36 +22897,6 @@ namespace E7.EcsGadgets
 
 
         /// <summary>
-        /// Like `GetSingletonEntity` in system but usable from outside.
-        /// You can add upto 0~6 CD and 0~2 SCD types to the query.
-        /// </summary>
-        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(bool nf1, bool nf2)
-            where CD1 : struct, IComponentData
-            where CD2 : struct, IComponentData
-            where CD3 : struct, IComponentData
-            where CD4 : struct, IComponentData
-            where CD5 : struct, IComponentData
-            where CD6 : struct, IComponentData
-            where SCD1 : struct, ISharedComponentData
-            where SCD2 : struct, ISharedComponentData
-        {
-            using (var eq = em.CreateEntityQuery(
-                ComponentType.ReadOnly<CD1>(),
-                ComponentType.ReadOnly<CD2>(),
-                ComponentType.ReadOnly<CD3>(),
-                ComponentType.ReadOnly<CD4>(),
-                ComponentType.ReadOnly<CD5>(),
-                ComponentType.ReadOnly<CD6>(),
-                ComponentType.ReadOnly<SCD1>(),
-                ComponentType.ReadOnly<SCD2>()
-            ))
-            {
-                return eq.GetSingletonEntity();
-            }
-        }
-
-
-        /// <summary>
         /// Return a linearized component data array of the first component of generic type arguments.
         /// You can add additional components upto 6 CD and upto 2 SCD types to the query.
         /// </summary>
@@ -20140,11 +22921,39 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToComponentDataArray<CD1>(Allocator.Persistent);
+                var na = eq.ToComponentDataArray<CD1>(Allocator.TempJob);
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(bool nf1, bool nf2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(nf1, nf2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -20186,7 +22995,7 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 int count = na.Length;
                 na.Dispose();
@@ -20233,12 +23042,41 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
                 var array = na.ToArray();
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(Func<CD1, bool> where, SCD1 filter1,
+            SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(where, filter1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -20282,9 +23120,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -20297,7 +23135,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -20352,9 +23190,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -20367,7 +23205,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -20379,6 +23217,35 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(Func<CD1, bool> where, bool nf1,
+            SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(where, nf1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -20421,9 +23288,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -20436,7 +23303,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -20491,9 +23358,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -20506,7 +23373,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -20518,6 +23385,35 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(Func<CD1, bool> where, bool nf1,
+            bool nf2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(where, nf1, nf2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -20559,9 +23455,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -20574,7 +23470,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -20627,9 +23523,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 {
                     for (int i = 0; i < na.Length; i++)
@@ -20642,7 +23538,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -20654,6 +23550,35 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(Func<CD1, CD2, bool> where,
+            SCD1 filter1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(where, filter1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -20697,9 +23622,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -20713,7 +23638,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -20768,9 +23693,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -20784,7 +23709,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -20796,6 +23721,35 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(Func<CD1, CD2, bool> where, bool nf1,
+            SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(where, nf1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -20839,9 +23793,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -20855,7 +23809,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -20910,9 +23864,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -20926,7 +23880,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -20938,6 +23892,35 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(Func<CD1, CD2, bool> where, bool nf1,
+            bool nf2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(where, nf1, nf2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -20979,9 +23962,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -20995,7 +23978,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -21049,9 +24032,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 {
@@ -21065,7 +24048,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -21077,6 +24060,35 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(Func<CD1, CD2, CD3, bool> where,
+            SCD1 filter1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(where, filter1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -21120,9 +24132,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -21137,7 +24149,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -21192,9 +24204,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -21209,7 +24221,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -21221,6 +24233,35 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(Func<CD1, CD2, CD3, bool> where,
+            bool nf1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(where, nf1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -21264,9 +24305,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -21281,7 +24322,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -21336,9 +24377,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -21353,7 +24394,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -21365,6 +24406,35 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(Func<CD1, CD2, CD3, bool> where,
+            bool nf1, bool nf2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(where, nf1, nf2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -21407,9 +24477,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -21424,7 +24494,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -21478,9 +24548,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -21495,7 +24565,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -21507,6 +24577,35 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(Func<CD1, CD2, CD3, CD4, bool> where,
+            SCD1 filter1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(where, filter1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -21550,9 +24649,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -21568,7 +24667,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -21623,9 +24722,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -21641,7 +24740,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -21653,6 +24752,35 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(Func<CD1, CD2, CD3, CD4, bool> where,
+            bool nf1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(where, nf1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -21696,9 +24824,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -21714,7 +24842,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -21769,9 +24897,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -21787,7 +24915,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -21799,6 +24927,35 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(Func<CD1, CD2, CD3, CD4, bool> where,
+            bool nf1, bool nf2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(where, nf1, nf2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -21841,9 +24998,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -21859,7 +25016,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -21913,9 +25070,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -21931,7 +25088,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -21943,6 +25100,35 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(
+            Func<CD1, CD2, CD3, CD4, CD5, bool> where, SCD1 filter1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(where, filter1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -21986,9 +25172,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -22005,7 +25191,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -22060,9 +25246,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -22079,7 +25265,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -22091,6 +25277,35 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(
+            Func<CD1, CD2, CD3, CD4, CD5, bool> where, bool nf1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(where, nf1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -22134,9 +25349,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -22153,7 +25368,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -22208,9 +25423,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -22227,7 +25442,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -22239,6 +25454,35 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(
+            Func<CD1, CD2, CD3, CD4, CD5, bool> where, bool nf1, bool nf2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(where, nf1, nf2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -22281,9 +25525,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -22300,7 +25544,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -22354,9 +25598,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -22373,7 +25617,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -22385,6 +25629,35 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(
+            Func<CD1, CD2, CD3, CD4, CD5, CD6, bool> where, SCD1 filter1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(where, filter1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -22428,9 +25701,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -22448,7 +25721,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -22503,9 +25776,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter1, filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -22523,7 +25796,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -22535,6 +25808,35 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(
+            Func<CD1, CD2, CD3, CD4, CD5, CD6, bool> where, bool nf1, SCD2 filter2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(where, nf1, filter2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -22578,9 +25880,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -22598,7 +25900,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -22653,9 +25955,9 @@ namespace E7.EcsGadgets
             ))
             {
                 eq.SetSharedComponentFilter(filter2);
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -22673,7 +25975,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -22685,6 +25987,35 @@ namespace E7.EcsGadgets
                 na.Dispose();
                 return array;
             }
+        }
+
+
+        /// <summary>
+        /// Like `GetSingletonEntity` in system but usable from outside.
+        /// 
+        /// You can add upto 0~6 CD and 0~2 SCD types to the query and also where filter
+        /// based on any of the CD. Query, SCD filter, and where filter combined must
+        /// produce 1 entity. Automatically throws if it wasn't, which is useful in tests.
+        /// </summary>
+        public Entity GetSingletonEntity<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(
+            Func<CD1, CD2, CD3, CD4, CD5, CD6, bool> where, bool nf1, bool nf2)
+            where CD1 : struct, IComponentData
+            where CD2 : struct, IComponentData
+            where CD3 : struct, IComponentData
+            where CD4 : struct, IComponentData
+            where CD5 : struct, IComponentData
+            where CD6 : struct, IComponentData
+            where SCD1 : struct, ISharedComponentData
+            where SCD2 : struct, ISharedComponentData
+        {
+            var ea = Entities<CD1, CD2, CD3, CD4, CD5, CD6, SCD1, SCD2>(where, nf1, nf2);
+            if (ea.Length != 1)
+            {
+                throw new System.InvalidOperationException(
+                    $"GetSingletonEntity() requires that exactly one exists but there are {ea.Length}.");
+            }
+
+            return ea[0];
         }
 
 
@@ -22727,9 +26058,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -22747,7 +26078,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
@@ -22801,9 +26132,9 @@ namespace E7.EcsGadgets
                 ComponentType.ReadOnly<SCD2>()
             ))
             {
-                var na = eq.ToEntityArray(Allocator.Persistent);
+                var na = eq.ToEntityArray(Allocator.TempJob);
 
-                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.TempJob);
+                NativeList<Entity> filtered = new NativeList<Entity>(na.Length, Allocator.Temp);
                 using (var cd1Cda = eq.ToComponentDataArray<CD1>(Allocator.TempJob))
                 using (var cd2Cda = eq.ToComponentDataArray<CD2>(Allocator.TempJob))
                 using (var cd3Cda = eq.ToComponentDataArray<CD3>(Allocator.TempJob))
@@ -22821,7 +26152,7 @@ namespace E7.EcsGadgets
                 }
 
                 na.Dispose();
-                na = new NativeArray<Entity>(filtered.Length, Allocator.Persistent);
+                na = new NativeArray<Entity>(filtered.Length, Allocator.Temp);
                 for (int i = 0; i < filtered.Length; i++)
                 {
                     na[i] = filtered[i];
